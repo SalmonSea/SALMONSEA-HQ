@@ -150,7 +150,7 @@
             gap: 8px;
             align-items: center;
             overflow-x: auto;
-            padding: 5px 40px 5px 5px; /* Extra padding for scroll shadow */
+            padding: 5px 40px 5px 5px;
             scrollbar-width: none;
         }
 
@@ -226,41 +226,45 @@
         }
 
         .sort-controls {
-            padding: 15px 20px 10px; /* Increased padding */
+            padding: 15px 20px;
             display: flex;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
             background-color: var(--bg-color);
+            position: relative;
             z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
         .sort-btn {
-            background: none;
-            border: none;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
             color: #8b949e;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: 4px;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
             transition: all 0.2s;
             white-space: nowrap;
         }
 
         .sort-btn:hover {
             color: var(--text-color);
-            background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent-blue);
         }
 
         .sort-btn.active {
             color: var(--accent-blue);
             background-color: rgba(88, 166, 255, 0.1);
+            border-color: var(--accent-blue);
         }
 
         .dashboard-grid {
-            padding: 20px 15px; /* Added top padding to prevent overlap */
+            padding: 30px 15px;
             overflow-y: auto;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -277,9 +281,7 @@
                 box-shadow: 10px 0 30px rgba(0,0,0,0.5);
             }
 
-            .sidebar.open {
-                transform: translateX(0);
-            }
+            .sidebar.open { transform: translateX(0); }
 
             .menu-toggle { display: block; }
 
@@ -293,7 +295,7 @@
             .search-container { max-width: 100px; }
 
             .sort-controls {
-                padding: 15px 15px 5px;
+                padding: 12px 15px;
                 overflow-x: auto;
                 scrollbar-width: none;
             }
