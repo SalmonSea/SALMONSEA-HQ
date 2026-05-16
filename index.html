@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Tracker Dashboard 🚀</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent-blue);
+        }
+
+        .filter-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .powered-by {
+            margin-top: auto;
+            font-size: 0.65rem;
+            color: #30363d;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            margin-bottom: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .powered-by span {
+            color: var(--accent-blue);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .controls-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-grow: 1;
+            flex-wrap: wrap;
+        }
+
+        .tech-filters {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .filter-pill.active {
+            background-color: rgba(88, 166, 255, 0.15);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .filter-pill.active.bull {
+            background-color: rgba(63, 185, 80, 0.15);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .clear-filters {
+            font-size: 0.75rem;
+            color: #8b949e;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 5px;
+            white-space: nowrap;
+        }
+
+        .rainbow-text {
+            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 180px;
+            width: 100%;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+
+        .sort-controls {
+            padding: 10px 20px 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sort-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .sort-btn:hover {
+            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .sort-btn.active {
+            color: var(--accent-blue);
+            background-color: rgba(88, 166, 255, 0.1);
+        }
+
+        .dashboard-grid {
+            padding: 15px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .stock-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-blue);
+        }
+
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .ticker {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .sector-tag {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+            margin-top: 4px;
+            display: inline-block;
+        }
+
+        .price-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .info-box {
+            background-color: rgba(255, 255, 255, 0.04);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.65rem;
+            color: #8b949e;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .technical-indicators {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .indicator {
+            font-size: 0.75rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .pos { color: var(--accent-green); }
+        .neg { color: var(--accent-red); }
+        .neutral { color: var(--accent-yellow); }
+
+        .note {
+            font-size: 0.75rem;
+            font-style: italic;
+            color: #8b949e;
+            margin-top: 12px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .rr-badge {
+            background-color: var(--accent-green);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Mission Control</h2>
+        <button class="filter-btn active" data-sector="all" onclick="setSector('all')">All Assets</button>
+        <button class="filter-btn" data-sector="Nuclear" onclick="setSector('Nuclear')">Nuclear/Energy</button>
+        <button class="filter-btn" data-sector="Quantum" onclick="setSector('Quantum')">Quantum Computing</button>
+        <button class="filter-btn" data-sector="DR" onclick="setSector('DR')">Global DRs</button>
+        <button class="filter-btn" data-sector="Titan" onclick="setSector('Titan')">Tech Titans</button>
+        
+        <div class="powered-by">
+            POWERED BY <span class="rainbow-text" style="font-size: 0.75rem;">GEMINI x SALMONSEA</span>
+        </div>
+
+        <div style="font-size: 0.8rem; color: #8b949e;">
+            Last Update: 16 May 2026
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <div class="controls-container">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search ticker..." onkeyup="applyFilters()">
+                </div>
+                <div class="tech-filters">
+                    <button class="filter-pill" id="filterRR" onclick="toggleTechFilter('rr')">R/R > 1.5</button>
+                    <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">MACD (+)</button>
+                    <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">SMA Up</button>
+                    <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">🔥 Bullish Only</button>
+                    <span class="clear-filters" onclick="resetAllFilters()">Clear All</span>
+                </div>
+            </div>
+            <h1 style="font-size: 1.2rem; margin: 0; white-space: nowrap;" class="rainbow-text">STOCK TRACKER</h1>
+        </header>
+
+        <div class="sort-controls">
+            <span style="font-size: 0.8rem; color: #8b949e;">Sort:</span>
+            <button class="sort-btn active" id="sortNone" onclick="setSort('none')">➖ Default</button>
+            <button class="sort-btn" id="sortAZ" onclick="setSort('az')">⬇️ A-Z</button>
+            <button class="sort-btn" id="sortRR" onclick="setSort('rr')">🔥 R/R (High-Low)</button>
+        </div>
+
+        <div class="dashboard-grid" id="dashboardGrid">
+            <!-- Cards will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        let currentSector = 'all';
+        let currentSort = 'none';
+        let techFilters = {
+            rr: false,
+            macd: false,
+            sma: false,
+            bull: false
+        };
+
+        function setSort(sortType) {
+            currentSort = sortType;
+            document.getElementById('sortNone').classList.toggle('active', currentSort === 'none');
+            document.getElementById('sortAZ').classList.toggle('active', currentSort === 'az');
+            document.getElementById('sortRR').classList.toggle('active', currentSort === 'rr');
+            applyFilters();
+        }
+
+        const stockData = [
+            // Nuclear & Energy
+            { ticker: "CCJ", sector: "Nuclear", support: "103.00", sl: "101.00", resistance: "122.00", tp: "141.00", rr: 1.54, macd: "+", sma: "up", note: "หลุุดแนวรับระยะสั้นมาแล้ว ต้องระวังหน่อย" },
+            { ticker: "CEG", sector: "Nuclear", support: "263.00", sl: "260.00", resistance: "300.00", tp: "300.00", rr: 0.56, macd: "-", sma: "down", note: "งบออกมาดี Guidance สวย แต่ดูเหมือนจะยังดีไม่พอแหะ" },
+            { ticker: "SMR", sector: "Nuclear", support: "10.50", sl: "8.80", resistance: "18.70", tp: "53.30", rr: 6.13, macd: "-", sma: "down", note: "หลุด POC" },
+            { ticker: "GEV", sector: "Nuclear", support: "832.50", sl: "777.00", resistance: "1064.50", tp: "1149.00", rr: 1.89, macd: "+", sma: "up", note: "เหมือนจะยังยืนได้ อาจสร้างฐานใหม่แถวๆ นี้" },
+            { ticker: "APD", sector: "Nuclear", support: "295.00", sl: "289.00", resistance: "305.00", tp: "336.00", rr: 1.39, macd: "+", sma: "up", note: "ยังคงยืนอยู่เหนือแนวรับสำคัญได้" },
+            { ticker: "BE", sector: "Nuclear", support: "163.00", sl: "131.00", resistance: "290.00", tp: "417.00", rr: 3.50, macd: "+", sma: "up", note: "เหมือนจะยังยืนได้ อาจสร้างฐานใหม่แถวๆ นี้" },
+
+            // Quantum Computing
+            { ticker: "IONQ", sector: "Quantum", support: "48.00", sl: "37.20", resistance: "74.00", tp: "100.00", rr: 3.17, macd: "-", sma: "down", note: "กลับมายืนเหนือแนวรับสำคัญได้ ดูน่าสนใจมากขึ้น แต่งบ 1Q26 ดูน่าสงสัย" },
+            { ticker: "RGTI", sector: "Quantum", support: "16.30", sl: "10.20", resistance: "25.60", tp: "47.50", rr: 4.02, macd: "-", sma: "down", note: "ดูเหมือนจะยืนได้และเกิดฐานใหญ่ขึ้นเรื่อยๆ" },
+            { ticker: "IBM", sector: "Quantum", support: "-", sl: "-", resistance: "-", tp: "-", rr: 0.00, macd: "-", sma: "down", note: "ทำ new low ไม่ผ่านเกณฑ์" },
+            { ticker: "FORM", sector: "Quantum", support: "124.00", sl: "121.00", resistance: "156.00", tp: "188.00", rr: 2.06, macd: "+", sma: "up", note: "ไม่ยอมลง อาจกำลังสร้างฐานใหม่" },
+            { ticker: "COHR", sector: "Quantum", support: "259.00", sl: "233.70", resistance: "382.45", tp: "505.90", rr: 2.99, macd: "+", sma: "up", note: "ATH บวกสวนตลาดอีกครั้ง" },
+            { ticker: "MKSI", sector: "Quantum", support: "245.00", sl: "202.00", resistance: "313.50", tp: "382.00", rr: 2.64, macd: "+", sma: "up", note: "มีแรงทำกำไรตามตลาด" },
+
+            // Tech Titans
+            { ticker: "AMAT", sector: "Titan", support: "322.00", sl: "314.00", resistance: "436.60", tp: "551.20", rr: 3.42, macd: "+", sma: "up", note: "ยังคงทำ ATH ได้แม้ตลาดปรับตัวลง" },
+            { ticker: "TDC", sector: "Titan", support: "33.00", sl: "29.30", resistance: "37.00", tp: "37.00", rr: 0.68, macd: "+", sma: "up", note: "พลิกกลับมายืนเหนือเส้น 200 ได้แล้ว" },
+            { ticker: "Q", sector: "Titan", support: "119.00", sl: "106.00", resistance: "157.00", tp: "195.00", rr: 2.86, macd: "+", sma: "up", note: "ทำ ATH สวนตลาดได้ งบปังมากๆ" },
+            { ticker: "ONTO", sector: "Titan", support: "225.00", sl: "201.60", resistance: "307.00", tp: "389.00", rr: 3.01, macd: "+", sma: "up", note: "มีแรงขายทำกำไรตามตลาด" },
+
+            // Global DRs
+            { ticker: "9988 (BABA80*)", sector: "DR", support: "123.00", sl: "115.00", resistance: "153.00", tp: "169.00", rr: 1.89, macd: "-", sma: "up", note: "ยังปรับตัวขึ้นเหนือ 50 ไม่ได้ และต้องระวังเส้น 20/50 ตัดลง" },
+            { ticker: "9992 (POP80)", sector: "DR", support: "150.00", sl: "140.00", resistance: "192.00", tp: "219.00", rr: 1.42, macd: "-", sma: "down", note: "ยังคงวิ่งอยู่ในแนวรับ" },
+            { ticker: "9999 (NETEASE80)", sector: "DR", support: "179.00", sl: "170.00", resistance: "204.00", tp: "204.00", rr: 0.98, macd: "-", sma: "down", note: "ปรับขึ้นมาเหนือแนวรับระยะสั้นได้แล้ว" },
+            { ticker: "700 (TENCENT80)", sector: "DR", support: "-", sl: "-", resistance: "-", tp: "-", rr: 0.00, macd: "-", sma: "down", note: "ทำ new low อีกครั้ง ควรเลี่ยงไปก่อน" },
+            { ticker: "1810 (XIAOMI80)", sector: "DR", support: "29.00", sl: "27.30", resistance: "32.00", tp: "32.00", rr: 0.55, macd: "-", sma: "down", note: "ยังติดต้านระยะสั้น" },
+            { ticker: "3750 (CATL23*)", sector: "DR", support: "656.00", sl: "606.00", resistance: "700.00", tp: "744.00", rr: 0.74, macd: "+", sma: "up", note: "กลับมาสร้างฐานอีกครั้ง" },
+            { ticker: "1347 (HUAHONG23)", sector: "DR", support: "110.00", sl: "106.50", resistance: "131.00", tp: "152.00", rr: 1.42, macd: "+", sma: "up", note: "แรงทำกำไร อาจเป็นโอกาสในการรอรับ" },
+            { ticker: "1024 (KUAISH23)", sector: "DR", support: "45.10", sl: "42.60", resistance: "52.80", tp: "52.80", rr: 0.62, macd: "-", sma: "down", note: "ยังติดแนวต้านระยะยาว" },
+            { ticker: "981 (SMIC23*)", sector: "DR", support: "68.00", sl: "65.00", resistance: "78.50", tp: "78.50", rr: 0.75, macd: "-", sma: "up", note: "ติดต้าน" },
+            { ticker: "9961 (TRIPCOM80*)", sector: "DR", support: "386.00", sl: "383.00", resistance: "416.00", tp: "416.00", rr: 0.51, macd: "-", sma: "down", note: "ลงมาต่ำกว่าแนวรับ" },
+            { ticker: "3888 (KINGSOFT23)", sector: "DR", support: "22.80", sl: "22.50", resistance: "26.90", tp: "31.60", rr: 1.94, macd: "-", sma: "down", note: "พลิกกลับมาได้ แต่ยังไม่น่าสนใจ" },
+            { ticker: "9660 (HORIZON23)", sector: "DR", support: "6.25", sl: "6.10", resistance: "7.10", tp: "7.10", rr: 0.53, macd: "-", sma: "down", note: "ควรรอดูไปก่อน" },
+            { ticker: "9880 (UBTECH23)", sector: "DR", support: "105.00", sl: "103.00", resistance: "125.60", tp: "147.00", rr: 1.57, macd: "-", sma: "up", note: "ยังคงรอ Volumn" },
+            { ticker: "20 (SENSE23)", sector: "DR", support: "1.81", sl: "1.80", resistance: "2.00", tp: "2.00", rr: 0.44, macd: "-", sma: "up", note: "ติดต้านลงมา" },
+            { ticker: "8035 (TEL23*)", sector: "DR", support: "42,200", sl: "39,900", resistance: "53,500", tp: "64,800", rr: 3.16, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรแล้ว อาจเป็นการสร้างฐานใหม่" },
+            { ticker: "6857 (ADVANT23)", sector: "DR", support: "23,000", sl: "19,000", resistance: "30,400", tp: "37,800", rr: 2.45, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรแล้ว" },
+            { ticker: "6861 (KEYENCE23)", sector: "DR", support: "63,900", sl: "54,600", resistance: "84,170", tp: "104,400", rr: 4.13, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไร ซึ่งอาจจะลงมาแนงรับด้านล่างได้ เพราะ Volumn บางมาก" },
+            { ticker: "S63 (STEG19)", sector: "DR", support: "9.97", sl: "9.84", resistance: "10.65", tp: "10.65", rr: 0.66, macd: "+", sma: "up", note: "หลุดแนวรับด้านบนมาแล้ว" },
+            { ticker: "ASML (ASML01*)", sector: "DR", support: "1,205.00", sl: "1,163.00", resistance: "1,329.00", tp: "1,453.00", rr: 1.22, macd: "+", sma: "up", note: "น่าจะไปต่อไดั แค่กำลังสร้างฐาน" },
+            { ticker: "NOVO_B (NOVOB80)", sector: "DR", support: "241.00", sl: "225.00", resistance: "302.00", tp: "302.00", rr: 1.03, macd: "-", sma: "down", note: "ยังคงติดต้าน" },
+            { ticker: "AMD (AMD80*)", sector: "DR", support: "355.00", sl: "328.00", resistance: "455.20", tp: "551.00", rr: 6.83, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรบ้างแล้ว" },
+            { ticker: "AMZN (AMZN80*)", sector: "DR", support: "262.70", sl: "261.00", resistance: "273.00", tp: "283.30", rr: 0.65, macd: "+", sma: "up", note: "มีทำกำไร แต่อาจเป็นการสร้างฐานใหม่ได้" },
+            { ticker: "AVGO (AVGO80*)", sector: "DR", support: "398.00", sl: "396.00", resistance: "430.00", tp: "462.00", rr: 0.98, macd: "+", sma: "up", note: "มีแรงขายทำกำไร" },
+            { ticker: "GOOG (GOOG80*)", sector: "DR", support: "385.00", sl: "378.00", resistance: "397.00", tp: "409.00", rr: 0.56, macd: "+", sma: "up", note: "เหมือนกำไรสร้างฐานใหม่" },
+            { ticker: "TSLA (TSLA80)", sector: "DR", support: "403.00", sl: "388.70", resistance: "429.00", tp: "429.00", rr: 0.36, macd: "-", sma: "up", note: "ยังติดต้านอยู่" },
+            { ticker: "META (META80)", sector: "DR", support: "604.30", sl: "592.00", resistance: "676.00", tp: "676.00", rr: 0.71, macd: "-", sma: "down", note: "ยังคงไม่หลุดแนวรับ" },
+            { ticker: "MSFT (MSFT80)", sector: "DR", support: "406.00", sl: "390.00", resistance: "430.00", tp: "506.50", rr: 1.93, macd: "-", sma: "down", note: "ยังยืนเหนือ POC ระยะยาวได้" },
+            { ticker: "NFLX (NFLX80)", sector: "DR", support: "86.60", sl: "85.00", resistance: "92.40", tp: "92.40", rr: 0.43, macd: "-", sma: "down", note: "ยังคงปรับตัวลงเรื่อยๆ" },
+            { ticker: "NVDA (NVDA80*)", sector: "DR", support: "192.00", sl: "176.00", resistance: "225.30", tp: "258.60", rr: 2.14, macd: "+", sma: "up", note: "ทำ ATH สวนตลาด" },
+            { ticker: "LLY (LLY80*)", sector: "DR", support: "948.00", sl: "873.00", resistance: "1,036.00", tp: "1,086.40", rr: 0.95, macd: "+", sma: "up", note: "ปรับตัวขึ้นจากแนวรับเรื่อยๆ" }
+        ];
+
+        function renderCards(data) {
+            const grid = document.getElementById('dashboardGrid');
+            grid.innerHTML = '';
+            
+            data.forEach(stock => {
+                const card = document.createElement('div');
+                card.className = 'stock-card';
+                card.setAttribute('data-sector', stock.sector);
+                
+                const macdClass = stock.macd === '+' ? 'pos' : 'neg';
+                const smaClass = stock.sma === 'up' ? 'pos' : 'neg';
+                
+                card.innerHTML = `
+                    <div class="stock-header">
+                        <div>
+                            <div class="ticker">${stock.ticker}</div>
+                            <div class="sector-tag">${stock.sector}</div>
+                        </div>
+                        ${stock.rr > 0 ? `<div class="rr-badge">R/R ${stock.rr}</div>` : '<div></div>'}
+                    </div>
+                    <div class="price-info">
+                        <div class="info-box">
+                            <span class="info-label">Support</span>
+                            <span class="info-value">${stock.support}</span>
+                        </div>
+                        <div class="info-box">
+                            <span class="info-label">Target Price</span>
+                            <span class="info-value" style="color: var(--accent-blue)">${stock.tp}</span>
+                        </div>
+                        <div class="info-box">
+                            <span class="info-label">Resistance</span>
+                            <span class="info-value">${stock.resistance}</span>
+                        </div>
+                        <div class="info-box">
+                            <span class="info-label">Stop Loss</span>
+                            <span class="info-value" style="color: var(--accent-red)">${stock.sl}</span>
+                        </div>
+                    </div>
+                    <div class="technical-indicators">
+                        <span class="indicator">MACD: <b class="${macdClass}">${stock.macd}</b></span>
+                        <span class="indicator">SMA: <b class="${smaClass}">${stock.sma}</b></span>
+                    </div>
+                    <div class="note" title="${stock.note}">${stock.note}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function setSector(sector) {
+            currentSector = sector;
+            document.querySelectorAll('.sidebar .filter-btn').forEach(btn => {
+                const btnSector = btn.getAttribute('data-sector');
+                btn.classList.toggle('active', btnSector === sector);
+            });
+            applyFilters();
+        }
+
+        function toggleTechFilter(filter) {
+            techFilters[filter] = !techFilters[filter];
+            const mapping = { 'rr': 'filterRR', 'macd': 'filterMACD', 'sma': 'filterSMA', 'bull': 'filterBull' };
+            document.getElementById(mapping[filter]).classList.toggle('active');
+            applyFilters();
+        }
+
+        function setSort(sortType) {
+            currentSort = sortType;
+            document.getElementById('sortNone').classList.toggle('active', currentSort === 'none');
+            document.getElementById('sortAZ').classList.toggle('active', currentSort === 'az');
+            document.getElementById('sortRR').classList.toggle('active', currentSort === 'rr');
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toUpperCase();
+            
+            let filtered = stockData.filter(stock => {
+                // Sector Filter
+                if (currentSector !== 'all' && stock.sector !== currentSector) return false;
+                
+                // Search Filter
+                if (search && !stock.ticker.includes(search)) return false;
+                
+                // Tech Filters (Working Independently)
+                if (techFilters.rr && stock.rr < 1.5) return false;
+                if (techFilters.macd && stock.macd !== '+') return false;
+                if (techFilters.sma && stock.sma !== 'up') return false;
+                
+                // Bullish Only Filter (Combine MACD + SMA + RR)
+                if (techFilters.bull && (stock.macd !== '+' || stock.sma !== 'up' || stock.rr < 1.5)) return false;
+                
+                return true;
+            });
+
+            // Apply Sorting
+            if (currentSort === 'az') {
+                filtered.sort((a, b) => a.ticker.localeCompare(b.ticker));
+            } else if (currentSort === 'rr') {
+                filtered.sort((a, b) => b.rr - a.rr);
+            }
+
+            renderCards(filtered);
+        }
+
+        function resetAllFilters() {
+            currentSector = 'all';
+            currentSort = 'none';
+            techFilters = { rr: false, macd: false, sma: false, bull: false };
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            document.getElementById('sortNone').classList.add('active');
+            document.getElementById('sortAZ').classList.remove('active');
+            document.getElementById('sortRR').classList.remove('active');
+            document.querySelectorAll('.sidebar .filter-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-sector') === 'all');
+            });
+            applyFilters();
+        }
+
+        // Initial render
+        applyFilters();
+    </script>
+</body>
+</html>
