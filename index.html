@@ -81,6 +81,7 @@
 
         .powered-by span {
             color: var(--accent-blue);
+            line-height: 1.4;
         }
 
         /* Main Content */
@@ -128,12 +129,11 @@
             align-items: center;
             overflow-x: auto;
             padding-bottom: 5px;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+            scrollbar-width: none; /* Firefox */
         }
 
         .tech-filters::-webkit-scrollbar {
-            display: none;
+            display: none; /* Chrome/Safari */
         }
 
         .filter-pill {
@@ -172,6 +172,7 @@
             text-decoration: underline;
             margin-left: 5px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .rainbow-text {
@@ -209,13 +210,11 @@
         .sort-controls {
             padding: 10px 20px 0;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
-            overflow-x: auto;
-            scrollbar-width: none;
+            background-color: var(--bg-color);
+            z-index: 10;
         }
-
-        .sort-controls::-webkit-scrollbar { display: none; }
 
         .sort-btn {
             background: none;
@@ -248,15 +247,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 15px;
-        }
-
-        .stock-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            transition: transform 0.2s;
-            position: relative;
+            flex-grow: 1;
         }
 
         /* Mobile Adjustments */
@@ -265,6 +256,7 @@
                 position: fixed;
                 height: 100vh;
                 transform: translateX(-100%);
+                box-shadow: 10px 0 30px rgba(0,0,0,0.5);
             }
 
             .sidebar.open {
@@ -276,30 +268,43 @@
             }
 
             header {
-                flex-direction: column;
-                align-items: flex-start;
+                padding: 10px 15px;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
                 gap: 10px;
             }
 
             .controls-container {
-                width: 100%;
-                justify-content: space-between;
+                gap: 10px;
+                overflow: hidden;
             }
 
             .tech-filters {
-                width: 100%;
-                margin-top: 10px;
-            }
-
-            .search-container {
-                max-width: none;
                 flex-grow: 1;
             }
 
-            h1.rainbow-text {
-                font-size: 1rem;
-                margin-top: 5px;
+            .search-container {
+                max-width: 120px;
             }
+
+            h1.rainbow-text {
+                font-size: 0.8rem;
+                margin-left: auto;
+            }
+
+            .sort-controls {
+                padding: 10px 15px 0;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+        }
+
+        .stock-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s;
         }
 
         .stock-header {
@@ -396,19 +401,32 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.7);
             z-index: 999;
         }
 
         .sidebar-overlay.active { display: block; }
+
+        #mobileCloseBtn {
+            display: none;
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            #mobileCloseBtn { display: block; }
+        }
     </style>
 </head>
 <body>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="sidebar" id="sidebar">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Mission Control</h2>
-            <button class="menu-toggle" onclick="toggleSidebar()" style="display: block; border: none; @media only screen and (min-width: 769px) { display: none; }">✕</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">Mission Control</h2>
+            <button id="mobileCloseBtn" onclick="toggleSidebar()">✕</button>
         </div>
         <button class="filter-btn active" data-sector="all" onclick="setSector('all')">All Assets</button>
         <button class="filter-btn" data-sector="Nuclear" onclick="setSector('Nuclear')">Nuclear/Energy</button>
@@ -417,7 +435,8 @@
         <button class="filter-btn" data-sector="Titan" onclick="setSector('Titan')">Tech Titans</button>
         
         <div class="powered-by">
-            Power by<span class="rainbow-text" style="font-size: 0.75rem;">GEMINI x SALMONSEA</span>
+            Power by
+            <span class="rainbow-text" style="font-size: 0.75rem;">GEMINI x SALMONSEA</span>
         </div>
 
         <div style="font-size: 0.8rem; color: #8b949e;">
@@ -517,7 +536,7 @@
             { ticker: "9880 (UBTECH23)", sector: "DR", support: "105.00", sl: "103.00", resistance: "125.60", tp: "147.00", rr: 1.57, macd: "-", sma: "up", note: "ยังคงรอ Volumn" },
             { ticker: "20 (SENSE23)", sector: "DR", support: "1.81", sl: "1.80", resistance: "2.00", tp: "2.00", rr: 0.44, macd: "-", sma: "up", note: "ติดต้านลงมา" },
             { ticker: "8035 (TEL23*)", sector: "DR", support: "42,200", sl: "39,900", resistance: "53,500", tp: "64,800", rr: 3.16, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรแล้ว อาจเป็นการสร้างฐานใหม่" },
-            { ticker: "6857 (ADVANT23)", sector: "DR", support: "28,000", sl: "27,700", resistance: "30,400", tp: "37,800", rr: 2.45, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรแล้ว" },
+            { ticker: "6857 (ADVANT23)", sector: "DR", support: "23,000", sl: "19,000", resistance: "30,400", tp: "37,800", rr: 2.45, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรแล้ว" },
             { ticker: "6861 (KEYENCE23)", sector: "DR", support: "63,900", sl: "54,600", resistance: "84,170", tp: "104,400", rr: 4.13, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไร ซึ่งอาจจะลงมาแนงรับด้านล่างได้ เพราะ Volumn บางมาก" },
             { ticker: "S63 (STEG19)", sector: "DR", support: "9.97", sl: "9.84", resistance: "10.65", tp: "10.65", rr: 0.66, macd: "+", sma: "up", note: "หลุดแนวรับด้านบนมาแล้ว" },
             { ticker: "ASML (ASML01*)", sector: "DR", support: "1,205.00", sl: "1,163.00", resistance: "1,329.00", tp: "1,453.00", rr: 1.22, macd: "+", sma: "up", note: "น่าจะไปต่อไดั แค่กำลังสร้างฐาน" },
@@ -596,6 +615,14 @@
             techFilters[filter] = !techFilters[filter];
             const mapping = { 'rr': 'filterRR', 'macd': 'filterMACD', 'sma': 'filterSMA', 'bull': 'filterBull' };
             document.getElementById(mapping[filter]).classList.toggle('active');
+            applyFilters();
+        }
+
+        function setSort(sortType) {
+            currentSort = sortType;
+            document.getElementById('sortNone').classList.toggle('active', currentSort === 'none');
+            document.getElementById('sortAZ').classList.toggle('active', currentSort === 'az');
+            document.getElementById('sortRR').classList.toggle('active', currentSort === 'rr');
             applyFilters();
         }
 
