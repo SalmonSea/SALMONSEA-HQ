@@ -469,18 +469,34 @@
                     
                     if (window.innerWidth <= 768 && this.classList.contains('expanded')) {
                         setTimeout(() => {
-                           // Smart Scroll: Only scroll if the card top is below the visible area
-                           const currentScroll = scrollContainer.scrollTop;
-                           const cardTop = this.offsetTop;
+                           // Get real-time exact positions after expansion animation
+                           const cardRect = this.getBoundingClientRect();
+                           const containerRect = scrollContainer.getBoundingClientRect();
                            
-                           // If card is already near top (less than 100px from current scroll), don't jump too much
-                           if (cardTop > currentScroll + 50) {
-                               scrollContainer.scrollTo({
-                                   top: cardTop - 15,
-                                   behavior: 'smooth'
-                               });
+                           const cardTop = cardRect.top;
+                           const cardBottom = cardRect.bottom;
+                           const containerTop = containerRect.top;
+                           const containerBottom = containerRect.bottom;
+                           
+                           // If card top is hidden under the menu
+                           if (cardTop < containerTop + 10) {
+                               scrollContainer.scrollBy({ top: cardTop - containerTop - 10, behavior: 'smooth' });
+                           } 
+                           // If card bottom is hidden below the screen
+                           else if (cardBottom > containerBottom - 10) {
+                               let scrollAmount = cardBottom - containerBottom + 20; 
+                               
+                               // Don't scroll so much that we hide the top of the card
+                               if (cardTop - scrollAmount < containerTop + 10) {
+                                   scrollAmount = cardTop - containerTop - 10;
+                               }
+                               
+                               if (scrollAmount > 0) {
+                                   scrollContainer.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+                               }
                            }
-                        }, 300);
+                           // If it's already comfortably in the middle, DO NOTHING!
+                        }, 320); // Delay matches CSS transition
                     }
                 };
                 
