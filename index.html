@@ -15,6 +15,7 @@
             --accent-yellow: #d29922;
             --border-color: #30363d;
             --sidebar-width: 250px;
+            --header-height: 125px; /* Estimated Search + Sort height */
         }
 
         body {
@@ -24,9 +25,9 @@
             margin: 0;
             display: flex;
             height: 100vh;
+            width: 100vw;
             overflow: hidden; /* Lock main viewport */
-            position: fixed; /* Extra lock for mobile */
-            width: 100%;
+            position: fixed; /* Prevent mobile pull-to-refresh and sinking */
         }
 
         /* Sidebar */
@@ -38,7 +39,7 @@
             flex-direction: column;
             padding: 20px;
             transition: transform 0.3s ease;
-            z-index: 2000;
+            z-index: 3000; /* Highest level */
         }
 
         .sidebar h2 {
@@ -65,7 +66,7 @@
             border-color: var(--accent-blue);
         }
 
-        .powered-by {
+        .powered-by-sidebar {
             margin-top: auto;
             font-size: 0.65rem;
             color: #30363d;
@@ -81,28 +82,38 @@
             gap: 5px;
         }
 
-        .powered-by span {
+        .powered-by-sidebar span {
             color: var(--accent-blue);
             line-height: 1.4;
         }
 
-        /* Main Content */
+        /* Main Content Area */
         .main-content {
             flex: 1;
+            position: relative;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            min-width: 0;
-            position: relative;
             background-color: var(--bg-color);
+            min-width: 0;
         }
 
-        /* Fixed Navigation Section */
-        .controls-wrapper {
-            flex-shrink: 0;
-            z-index: 1000;
+        /* Immortal Header (Fixed to Top) */
+        .immortal-nav {
+            position: fixed;
+            top: 0;
+            left: 0; /* Will be offset by sidebar width on desktop */
+            right: 0;
+            z-index: 2000;
             background-color: var(--bg-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Layout adjustment for Sidebar */
+        @media (min-width: 769px) {
+            .immortal-nav { left: var(--sidebar-width); }
         }
 
         header {
@@ -111,7 +122,6 @@
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 15px;
         }
 
         .controls-container {
@@ -120,7 +130,6 @@
             gap: 15px;
             flex-grow: 1;
             min-width: 0;
-            position: relative;
         }
 
         .menu-toggle {
@@ -132,7 +141,6 @@
             padding: 5px 10px;
             border-radius: 6px;
             cursor: pointer;
-            flex-shrink: 0;
         }
 
         .tech-filters-wrapper {
@@ -152,7 +160,6 @@
             width: 40px;
             background: linear-gradient(to right, transparent, var(--card-bg));
             pointer-events: none;
-            opacity: 0.8;
         }
 
         .tech-filters {
@@ -176,10 +183,7 @@
             cursor: pointer;
             transition: all 0.2s;
             white-space: nowrap;
-            flex-shrink: 0;
         }
-
-        .filter-pill:hover { border-color: var(--accent-blue); }
 
         .filter-pill.active {
             background-color: rgba(88, 166, 255, 0.15);
@@ -193,55 +197,12 @@
             color: var(--accent-green);
         }
 
-        .clear-filters {
-            font-size: 0.75rem;
-            color: #8b949e;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-left: 5px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .rainbow-text {
-            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            animation: shine 5s linear infinite;
-        }
-
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-
-        .search-container {
-            position: relative;
-            max-width: 160px;
-            width: 100%;
-            flex-shrink: 0;
-        }
-
-        #searchInput {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-size: 0.85rem;
-            box-sizing: border-box;
-        }
-
         .sort-controls {
             padding: 12px 20px;
             display: flex;
             gap: 12px;
             align-items: center;
             background-color: var(--bg-color);
-            position: relative;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -260,26 +221,22 @@
             white-space: nowrap;
         }
 
-        .sort-btn:hover {
-            color: var(--text-color);
-            border-color: var(--accent-blue);
-        }
-
         .sort-btn.active {
             color: var(--accent-blue);
             background-color: rgba(88, 166, 255, 0.1);
             border-color: var(--accent-blue);
         }
 
+        /* Scrollable Grid */
         .dashboard-grid {
-            padding: 20px 15px 60px;
+            padding: calc(var(--header-height) + 20px) 15px 40px;
+            height: 100vh;
             overflow-y: auto;
+            box-sizing: border-box;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
-            flex-grow: 1;
             align-content: start;
-            position: relative; /* Anchor for offsetTop */
             -webkit-overflow-scrolling: touch;
         }
 
@@ -308,9 +265,7 @@
                 transform: translateY(0);
                 margin-top: 15px;
             }
-            .stock-card:hover .expand-hint {
-                display: none;
-            }
+            .stock-card:hover .expand-hint { display: none; }
         }
 
         .stock-card.expanded {
@@ -326,16 +281,13 @@
             margin-top: 15px;
         }
 
-        .stock-card.expanded .expand-hint {
-            display: none;
-        }
+        .stock-card.expanded .expand-hint { display: none; }
 
         .card-details {
             display: none;
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s ease;
-            margin-top: 0;
         }
 
         .expand-hint {
@@ -345,21 +297,23 @@
             margin-top: 5px;
         }
 
-        /* Global Footer Signature */
-        .global-footer {
-            display: none;
+        /* Integrated Footer (Inside Grid) */
+        .grid-footer {
+            grid-column: 1 / -1; /* Stretch across all columns */
             padding: 40px 20px;
             text-align: center;
-            background-color: var(--bg-color);
-            border-top: 1px solid var(--border-color);
             font-size: 0.75rem;
             color: #30363d;
             letter-spacing: 2px;
             font-weight: bold;
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
         }
 
         /* Mobile Adjustments */
         @media (max-width: 768px) {
+            :root { --header-height: 115px; }
+
             .sidebar {
                 position: fixed;
                 height: 100vh;
@@ -370,138 +324,29 @@
             .sidebar.open { transform: translateX(0); }
             .menu-toggle { display: block; }
 
-            header {
-                padding: 10px 15px;
-                gap: 10px;
-            }
-
-            .controls-container { gap: 10px; }
+            header { padding: 10px 15px; }
             .search-container { max-width: 100px; }
-
-            .sort-controls {
-                padding: 10px 15px;
-                overflow-x: auto;
-                scrollbar-width: none;
-            }
-
-            .global-footer {
-                display: block;
-            }
+            .sort-controls { padding: 10px 15px; overflow-x: auto; scrollbar-width: none; }
         }
 
-        .stock-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .ticker-wrapper {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .ticker {
-            font-size: 1.15rem;
-            font-weight: bold;
-            color: white;
-            line-height: 1.2;
-            word-break: break-word;
-        }
-
-        .sector-tag {
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 10px;
-            background-color: rgba(88, 166, 255, 0.1);
-            color: var(--accent-blue);
-            margin-top: 2px;
-            display: inline-block;
-        }
-
-        .price-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .info-box {
-            background-color: rgba(255, 255, 255, 0.04);
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .info-label {
-            font-size: 0.65rem;
-            color: #8b949e;
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .info-value {
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-        .technical-indicators {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .indicator {
-            font-size: 0.75rem;
-            padding: 3px 6px;
-            border-radius: 4px;
-            background-color: rgba(255, 255, 255, 0.03);
-        }
-
+        .stock-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .ticker-wrapper { flex: 1; min-width: 0; }
+        .ticker { font-size: 1.15rem; font-weight: bold; color: white; line-height: 1.2; word-break: break-word; }
+        .sector-tag { font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; background-color: rgba(88, 166, 255, 0.1); color: var(--accent-blue); margin-top: 2px; display: inline-block; }
+        .price-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .info-box { background-color: rgba(255, 255, 255, 0.04); padding: 8px; border-radius: 6px; text-align: center; }
+        .info-label { font-size: 0.65rem; color: #8b949e; display: block; margin-bottom: 2px; }
+        .info-value { font-size: 0.9rem; font-weight: bold; }
+        .technical-indicators { display: flex; gap: 8px; margin-bottom: 12px; }
+        .indicator { font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; background-color: rgba(255, 255, 255, 0.03); }
         .pos { color: var(--accent-green); }
         .neg { color: var(--accent-red); }
-        .neutral { color: var(--accent-yellow); }
-
-        .note {
-            font-size: 0.75rem;
-            font-style: italic;
-            color: #8b949e;
-            border-top: 1px solid var(--border-color);
-            padding-top: 8px;
-            line-height: 1.4;
-        }
-
-        .rr-badge {
-            background-color: var(--accent-green);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.7);
-            z-index: 1500;
-        }
-
+        .note { font-size: 0.75rem; font-style: italic; color: #8b949e; border-top: 1px solid var(--border-color); padding-top: 8px; line-height: 1.4; }
+        .rr-badge { background-color: var(--accent-green); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; flex-shrink: 0; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 2500; }
         .sidebar-overlay.active { display: block; }
-
-        #mobileCloseBtn {
-            display: none;
-            background: none;
-            border: none;
-            color: #8b949e;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            #mobileCloseBtn { display: block; }
-        }
+        #mobileCloseBtn { display: none; background: none; border: none; color: #8b949e; font-size: 1.5rem; cursor: pointer; }
+        @media (max-width: 768px) { #mobileCloseBtn { display: block; } }
     </style>
 </head>
 <body>
@@ -517,7 +362,7 @@
         <button class="filter-btn" data-sector="DR" onclick="setSector('DR')">Global DRs</button>
         <button class="filter-btn" data-sector="Titan" onclick="setSector('Titan')">Tech Titans</button>
         
-        <div class="powered-by">
+        <div class="powered-by-sidebar">
             Power by
             <span class="rainbow-text" style="font-size: 0.75rem;">GEMINI x SALMONSEA</span>
         </div>
@@ -528,8 +373,7 @@
     </div>
 
     <div class="main-content">
-        <!-- Fixed Header Area -->
-        <div class="controls-wrapper">
+        <div class="immortal-nav">
             <header>
                 <div class="controls-container">
                     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
@@ -542,7 +386,7 @@
                             <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">MACD (+)</button>
                             <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">SMA Up</button>
                             <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">🔥 Bullish Only</button>
-                            <span class="clear-filters" onclick="resetAllFilters()">Clear All</span>
+                            <span style="font-size: 0.75rem; color: #8b949e; cursor: pointer; text-decoration: underline; margin-left: 5px; white-space: nowrap;" onclick="resetAllFilters()">Clear All</span>
                         </div>
                     </div>
                 </div>
@@ -558,33 +402,16 @@
         <div class="dashboard-grid" id="dashboardGrid">
             <!-- Cards will be generated here -->
         </div>
-
-        <div class="global-footer">
-            POWERED BY <span class="rainbow-text">GEMINI x SALMONSEA</span>
-        </div>
     </div>
 
     <script>
         let currentSector = 'all';
         let currentSort = 'none';
-        let techFilters = {
-            rr: false,
-            macd: false,
-            sma: false,
-            bull: false
-        };
+        let techFilters = { rr: false, macd: false, sma: false, bull: false };
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('active');
-        }
-
-        function setSort(sortType) {
-            currentSort = sortType;
-            document.getElementById('sortNone').classList.toggle('active', currentSort === 'none');
-            document.getElementById('sortAZ').classList.toggle('active', currentSort === 'az');
-            document.getElementById('sortRR').classList.toggle('active', currentSort === 'rr');
-            applyFilters();
         }
 
         const stockData = [
@@ -650,26 +477,18 @@
             data.forEach(stock => {
                 const card = document.createElement('div');
                 card.className = 'stock-card';
-                card.onclick = function(event) { 
+                card.onclick = function() { 
                     const isExpanded = this.classList.contains('expanded');
-                    
-                    // Always close all other cards (Accordion Logic)
                     document.querySelectorAll('.stock-card.expanded').forEach(c => {
-                        if (c !== this) {
-                            c.classList.remove('expanded');
-                        }
+                        if (c !== this) c.classList.remove('expanded');
                     });
 
-                    // Toggle the clicked card
                     this.classList.toggle('expanded');
                     
-                    // On mobile, scroll the card into view if it was just opened
                     if (window.innerWidth <= 768 && this.classList.contains('expanded')) {
-                        // Using manual scrollTo on the grid container to prevent parent shifting
                         setTimeout(() => {
-                           const cardTop = this.offsetTop;
                            grid.scrollTo({
-                               top: cardTop - 10, // Small margin from the sticky header
+                               top: this.offsetTop - 10,
                                behavior: 'smooth'
                            });
                         }, 300);
@@ -687,27 +506,13 @@
                         </div>
                         ${stock.rr > 0 ? `<div class="rr-badge">R/R ${stock.rr}</div>` : '<div></div>'}
                     </div>
-                    
                     <div class="expand-hint">▼ Click to see details</div>
-
                     <div class="card-details">
                         <div class="price-info">
-                            <div class="info-box">
-                                <span class="info-label">Support</span>
-                                <span class="info-value">${stock.support}</span>
-                            </div>
-                            <div class="info-box">
-                                <span class="info-label">Target Price</span>
-                                <span class="info-value" style="color: var(--accent-blue)">${stock.tp}</span>
-                            </div>
-                            <div class="info-box">
-                                <span class="info-label">Resistance</span>
-                                <span class="info-value">${stock.resistance}</span>
-                            </div>
-                            <div class="info-box">
-                                <span class="info-label">Stop Loss</span>
-                                <span class="info-value" style="color: var(--accent-red)">${stock.sl}</span>
-                            </div>
+                            <div class="info-box"><span class="info-label">Support</span><span class="info-value">${stock.support}</span></div>
+                            <div class="info-box"><span class="info-label">Target Price</span><span class="info-value" style="color: var(--accent-blue)">${stock.tp}</span></div>
+                            <div class="info-box"><span class="info-label">Resistance</span><span class="info-value">${stock.resistance}</span></div>
+                            <div class="info-box"><span class="info-label">Stop Loss</span><span class="info-value" style="color: var(--accent-red)">${stock.sl}</span></div>
                         </div>
                         <div class="technical-indicators">
                             <span class="indicator">MACD: <b class="${macdClass}">${stock.macd}</b></span>
@@ -718,13 +523,18 @@
                 `;
                 grid.appendChild(card);
             });
+
+            // Add Footer inside Grid (Mobile only logic handled by CSS)
+            const footer = document.createElement('div');
+            footer.className = 'grid-footer';
+            footer.innerHTML = `POWERED BY <span class="rainbow-text">GEMINI x SALMONSEA</span>`;
+            grid.appendChild(footer);
         }
 
         function setSector(sector) {
             currentSector = sector;
             document.querySelectorAll('.sidebar .filter-btn').forEach(btn => {
-                const btnSector = btn.getAttribute('data-sector');
-                btn.classList.toggle('active', btnSector === sector);
+                btn.classList.toggle('active', btn.getAttribute('data-sector') === sector);
             });
             if (window.innerWidth <= 768) toggleSidebar(); 
             applyFilters();
@@ -747,7 +557,6 @@
 
         function applyFilters() {
             const search = document.getElementById('searchInput').value.toUpperCase();
-            
             let filtered = stockData.filter(stock => {
                 if (currentSector !== 'all' && stock.sector !== currentSector) return false;
                 if (search && !stock.ticker.includes(search)) return false;
@@ -757,13 +566,8 @@
                 if (techFilters.bull && (stock.macd !== '+' || stock.sma !== 'up' || stock.rr < 1.5)) return false;
                 return true;
             });
-
-            if (currentSort === 'az') {
-                filtered.sort((a, b) => a.ticker.localeCompare(b.ticker));
-            } else if (currentSort === 'rr') {
-                filtered.sort((a, b) => b.rr - a.rr);
-            }
-
+            if (currentSort === 'az') filtered.sort((a, b) => a.ticker.localeCompare(b.ticker));
+            else if (currentSort === 'rr') filtered.sort((a, b) => b.rr - a.rr);
             renderCards(filtered);
         }
 
