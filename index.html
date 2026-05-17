@@ -27,10 +27,10 @@
             display: flex;
             height: 100vh;
             width: 100vw;
-            overflow: hidden; /* Lock main body scroll */
+            overflow: hidden; 
         }
 
-        /* Sidebar - Fixed to the left */
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background-color: var(--card-bg);
@@ -68,7 +68,6 @@
             background-color: var(--accent-blue);
             color: white;
             border-color: var(--accent-blue);
-            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
         }
 
         .powered-by-sidebar {
@@ -85,7 +84,6 @@
             gap: 6px;
         }
 
-        /* Rainbow Effect */
         .rainbow-text {
             background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
             background-size: 200% auto;
@@ -101,7 +99,7 @@
             to { background-position: 200% center; }
         }
 
-        /* Main Content - Flex column */
+        /* Main Content */
         .main-content {
             flex: 1;
             display: flex;
@@ -111,7 +109,6 @@
             position: relative;
         }
 
-        /* Header Area - Static at top of main-content */
         .nav-container {
             flex-shrink: 0;
             background-color: var(--bg-color);
@@ -226,7 +223,7 @@
             border-color: var(--accent-blue);
         }
 
-        /* Scrollable Area */
+        /* Scroll Area */
         .scroll-area {
             flex: 1;
             overflow-y: auto;
@@ -291,7 +288,7 @@
             border-top: 1px solid var(--border-color);
         }
 
-        /* Mobile Viewports */
+        /* Mobile Fixes */
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -301,14 +298,15 @@
             }
             .sidebar.open { transform: translateX(0); }
             .menu-toggle { display: block; }
-            .search-container { width: 130px; }
-            header { padding: 10px 15px; gap: 10px; }
-            .tech-filters { padding-right: 20px; }
+            .search-container { width: 110px; } /* Slightly narrower to fit pills */
+            header { padding: 10px; gap: 8px; }
+            .tech-filters { padding-right: 20px; gap: 8px; }
+            .filter-pill { padding: 6px 12px; font-size: 0.7rem; }
         }
 
         /* Card Content Styles */
         .stock-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-        .ticker { font-size: 1.2rem; font-weight: 800; color: white; line-height: 1.2; word-break: break-word; }
+        .ticker { font-size: 1.15rem; font-weight: 800; color: white; line-height: 1.2; word-break: break-word; }
         .sector-tag { font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; background-color: rgba(88, 166, 255, 0.1); color: var(--accent-blue); margin-top: 4px; display: inline-block; font-weight: bold; }
         .rr-badge { background-color: var(--accent-green); color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
         .price-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -380,9 +378,9 @@
 
         <div class="scroll-area" id="scrollContainer">
             <div class="dashboard-grid" id="dashboardGrid">
-                <!-- Cards here -->
+                <!-- Cards -->
             </div>
-            <div class="grid-footer" id="gridFooter">
+            <div class="grid-footer">
                 POWERED BY <span class="rainbow-text">GEMINI x SALMONSEA</span>
             </div>
         </div>
@@ -471,10 +469,17 @@
                     
                     if (window.innerWidth <= 768 && this.classList.contains('expanded')) {
                         setTimeout(() => {
-                           scrollContainer.scrollTo({
-                               top: this.offsetTop - 10,
-                               behavior: 'smooth'
-                           });
+                           // Smart Scroll: Only scroll if the card top is below the visible area
+                           const currentScroll = scrollContainer.scrollTop;
+                           const cardTop = this.offsetTop;
+                           
+                           // If card is already near top (less than 100px from current scroll), don't jump too much
+                           if (cardTop > currentScroll + 50) {
+                               scrollContainer.scrollTo({
+                                   top: cardTop - 15,
+                                   behavior: 'smooth'
+                               });
+                           }
                         }, 300);
                     }
                 };
