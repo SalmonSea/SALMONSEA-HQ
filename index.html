@@ -287,10 +287,40 @@
             flex-direction: column;
         }
 
-        .stock-card:hover, .stock-card.expanded {
+        /* Hover effect only for devices that support it (Desktop) */
+        @media (hover: hover) {
+            .stock-card:hover {
+                transform: translateY(-5px);
+                border-color: var(--accent-blue);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+            .stock-card:hover .card-details {
+                display: block;
+                opacity: 1;
+                transform: translateY(0);
+                margin-top: 15px;
+            }
+            .stock-card:hover .expand-hint {
+                display: none;
+            }
+        }
+
+        /* Expanded state for both Mobile tap and Desktop search highlights */
+        .stock-card.expanded {
             transform: translateY(-5px);
             border-color: var(--accent-blue);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .stock-card.expanded .card-details {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            margin-top: 15px;
+        }
+
+        .stock-card.expanded .expand-hint {
+            display: none;
         }
 
         .card-details {
@@ -301,13 +331,6 @@
             margin-top: 0;
         }
 
-        .stock-card:hover .card-details, .stock-card.expanded .card-details {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-            margin-top: 15px;
-        }
-
         .expand-hint {
             font-size: 0.65rem;
             color: #30363d;
@@ -315,12 +338,9 @@
             margin-top: 5px;
         }
 
-        .stock-card:hover .expand-hint, .stock-card.expanded .expand-hint {
-            display: none;
-        }
-
         /* Global Footer Signature */
         .global-footer {
+            display: none; /* Hidden on Desktop by default */
             padding: 20px;
             text-align: center;
             background-color: var(--bg-color);
@@ -355,6 +375,10 @@
                 padding: 12px 15px;
                 overflow-x: auto;
                 scrollbar-width: none;
+            }
+
+            .global-footer {
+                display: block; /* Visible only on Mobile */
             }
         }
 
@@ -618,9 +642,9 @@
                 card.className = 'stock-card';
                 card.onclick = function() { 
                     const isExpanded = this.classList.contains('expanded');
-                    // Accordion Logic: Close all cards first
+                    // Close all other cards (Accordion Logic)
                     document.querySelectorAll('.stock-card').forEach(c => c.classList.remove('expanded'));
-                    // If the clicked card wasn't expanded, expand it
+                    // If it wasn't already expanded, open it. If it was, it stays closed.
                     if (!isExpanded) {
                         this.classList.add('expanded');
                     }
