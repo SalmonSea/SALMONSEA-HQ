@@ -265,13 +265,14 @@
 
         /* --- Updated Stable Grid & Cards --- */
         .dashboard-grid {
-            padding: 20px 15px 10px;
+            padding: 20px 15px 40px;
             overflow-y: auto;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             flex-grow: 1;
             align-content: start;
+            scroll-padding-top: 100px; /* Offset for scrollIntoView */
         }
 
         .stock-card {
@@ -285,9 +286,9 @@
             min-height: 70px;
             display: flex;
             flex-direction: column;
+            scroll-margin-top: 100px;
         }
 
-        /* Hover effect only for devices that support it (Desktop) */
         @media (hover: hover) {
             .stock-card:hover {
                 transform: translateY(-5px);
@@ -305,7 +306,6 @@
             }
         }
 
-        /* Expanded state for both Mobile tap and Desktop search highlights */
         .stock-card.expanded {
             transform: translateY(-5px);
             border-color: var(--accent-blue);
@@ -340,8 +340,8 @@
 
         /* Global Footer Signature */
         .global-footer {
-            display: none; /* Hidden on Desktop by default */
-            padding: 20px;
+            display: none; /* Hidden on Desktop */
+            padding: 30px 20px;
             text-align: center;
             background-color: var(--bg-color);
             border-top: 1px solid var(--border-color);
@@ -640,13 +640,24 @@
             data.forEach(stock => {
                 const card = document.createElement('div');
                 card.className = 'stock-card';
-                card.onclick = function() { 
+                card.onclick = function(event) { 
                     const isExpanded = this.classList.contains('expanded');
-                    // Close all other cards (Accordion Logic)
-                    document.querySelectorAll('.stock-card').forEach(c => c.classList.remove('expanded'));
-                    // If it wasn't already expanded, open it. If it was, it stays closed.
-                    if (!isExpanded) {
-                        this.classList.add('expanded');
+                    
+                    // Always close all other cards (Accordion Logic)
+                    document.querySelectorAll('.stock-card.expanded').forEach(c => {
+                        if (c !== this) {
+                            c.classList.remove('expanded');
+                        }
+                    });
+
+                    // Toggle the clicked card (Tap to Open / Tap again to Close)
+                    this.classList.toggle('expanded');
+                    
+                    // On mobile, scroll the card into view if it was just opened
+                    if (window.innerWidth <= 768 && this.classList.contains('expanded')) {
+                        setTimeout(() => {
+                           this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 350); // Slight delay for animation to start
                     }
                 };
                 
