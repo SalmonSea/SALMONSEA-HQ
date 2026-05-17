@@ -36,7 +36,7 @@
             flex-direction: column;
             padding: 20px;
             transition: transform 0.3s ease;
-            z-index: 1000;
+            z-index: 2000; /* Increased to be above sticky header */
         }
 
         .sidebar h2 {
@@ -91,6 +91,17 @@
             flex-direction: column;
             overflow: hidden;
             min-width: 0;
+            position: relative;
+        }
+
+        /* Sticky Control Section */
+        .sticky-controls {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
         }
 
         header {
@@ -226,13 +237,12 @@
         }
 
         .sort-controls {
-            padding: 15px 20px;
+            padding: 12px 20px;
             display: flex;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
             background-color: var(--bg-color);
             position: relative;
-            z-index: 10;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
@@ -272,7 +282,8 @@
             gap: 20px;
             flex-grow: 1;
             align-content: start;
-            scroll-padding-top: 100px; /* Offset for scrollIntoView */
+            /* Scroll padding for sticky header offset */
+            scroll-padding-top: 20px;
         }
 
         .stock-card {
@@ -286,7 +297,8 @@
             min-height: 70px;
             display: flex;
             flex-direction: column;
-            scroll-margin-top: 100px;
+            /* Prevents scroll from sticking right at the edge */
+            scroll-margin-top: 150px; 
         }
 
         @media (hover: hover) {
@@ -378,7 +390,7 @@
             }
 
             .global-footer {
-                display: block; /* Visible only on Mobile */
+                display: block;
             }
         }
 
@@ -478,7 +490,7 @@
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.7);
-            z-index: 999;
+            z-index: 1500;
         }
 
         .sidebar-overlay.active { display: block; }
@@ -521,28 +533,31 @@
     </div>
 
     <div class="main-content">
-        <header>
-            <div class="controls-container">
-                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search ticker..." onkeyup="applyFilters()">
-                </div>
-                <div class="tech-filters-wrapper">
-                    <div class="tech-filters">
-                        <button class="filter-pill" id="filterRR" onclick="toggleTechFilter('rr')">R/R > 1.5</button>
-                        <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">MACD (+)</button>
-                        <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">SMA Up</button>
-                        <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">🔥 Bullish Only</button>
-                        <span class="clear-filters" onclick="resetAllFilters()">Clear All</span>
+        <!-- Sticky Container for Search, Filter, Sort -->
+        <div class="sticky-controls">
+            <header>
+                <div class="controls-container">
+                    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search ticker..." onkeyup="applyFilters()">
+                    </div>
+                    <div class="tech-filters-wrapper">
+                        <div class="tech-filters">
+                            <button class="filter-pill" id="filterRR" onclick="toggleTechFilter('rr')">R/R > 1.5</button>
+                            <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">MACD (+)</button>
+                            <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">SMA Up</button>
+                            <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">🔥 Bullish Only</button>
+                            <span class="clear-filters" onclick="resetAllFilters()">Clear All</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        <div class="sort-controls">
-            <button class="sort-btn active" id="sortNone" onclick="setSort('none')">➖ Default</button>
-            <button class="sort-btn" id="sortAZ" onclick="setSort('az')">⬇️ A-Z</button>
-            <button class="sort-btn" id="sortRR" onclick="setSort('rr')">🔥 R/R (High-Low)</button>
+            <div class="sort-controls">
+                <button class="sort-btn active" id="sortNone" onclick="setSort('none')">➖ Default</button>
+                <button class="sort-btn" id="sortAZ" onclick="setSort('az')">⬇️ A-Z</button>
+                <button class="sort-btn" id="sortRR" onclick="setSort('rr')">🔥 R/R (High-Low)</button>
+            </div>
         </div>
 
         <div class="dashboard-grid" id="dashboardGrid">
@@ -655,9 +670,10 @@
                     
                     // On mobile, scroll the card into view if it was just opened
                     if (window.innerWidth <= 768 && this.classList.contains('expanded')) {
+                        // Small delay to allow the toggle animation to start and avoid layout jumps
                         setTimeout(() => {
-                           this.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 350); // Slight delay for animation to start
+                            this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 300);
                     }
                 };
                 
