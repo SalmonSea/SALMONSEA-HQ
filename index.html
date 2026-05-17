@@ -150,7 +150,7 @@
             gap: 8px;
             align-items: center;
             overflow-x: auto;
-            padding: 5px 40px 5px 5px; /* Extra padding for scroll shadow */
+            padding: 5px 40px 5px 5px;
             scrollbar-width: none;
         }
 
@@ -263,13 +263,61 @@
             border-color: var(--accent-blue);
         }
 
+        /* --- Updated Stable Grid & Cards --- */
         .dashboard-grid {
-            padding: 30px 15px;
+            padding: 20px 15px 40px; /* Increased bottom padding */
             overflow-y: auto;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             flex-grow: 1;
+            align-content: start; /* Prevent items from stretching */
+        }
+
+        .stock-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            height: fit-content;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stock-card:hover, .stock-card.expanded {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Hide details by default with height 0 instead of max-height */
+        .card-details {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            margin-top: 0;
+        }
+
+        .stock-card:hover .card-details, .stock-card.expanded .card-details {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            margin-top: 15px;
+        }
+
+        .expand-hint {
+            font-size: 0.65rem;
+            color: #30363d;
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        .stock-card:hover .expand-hint, .stock-card.expanded .expand-hint {
+            display: none;
         }
 
         /* Mobile Adjustments */
@@ -282,7 +330,6 @@
             }
 
             .sidebar.open { transform: translateX(0); }
-
             .menu-toggle { display: block; }
 
             header {
@@ -291,7 +338,6 @@
             }
 
             .controls-container { gap: 10px; }
-
             .search-container { max-width: 100px; }
 
             .sort-controls {
@@ -301,35 +347,33 @@
             }
         }
 
-        .stock-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
-            transition: transform 0.2s;
-        }
-
         .stock-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .ticker-wrapper {
+            flex: 1;
+            min-width: 0;
         }
 
         .ticker {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: bold;
             color: white;
             line-height: 1.2;
+            word-break: break-word; /* Fix long ticker wrap */
         }
 
         .sector-tag {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             padding: 2px 6px;
             border-radius: 10px;
             background-color: rgba(88, 166, 255, 0.1);
             color: var(--accent-blue);
-            margin-top: 4px;
+            margin-top: 2px;
             display: inline-block;
         }
 
@@ -337,7 +381,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 12px;
         }
 
         .info-box {
@@ -362,7 +405,7 @@
         .technical-indicators {
             display: flex;
             gap: 8px;
-            margin-top: 8px;
+            margin-bottom: 12px;
         }
 
         .indicator {
@@ -380,13 +423,9 @@
             font-size: 0.75rem;
             font-style: italic;
             color: #8b949e;
-            margin-top: 12px;
             border-top: 1px solid var(--border-color);
             padding-top: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            line-height: 1.4;
         }
 
         .rr-badge {
@@ -396,6 +435,7 @@
             border-radius: 4px;
             font-size: 0.7rem;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .sidebar-overlay {
@@ -562,42 +602,47 @@
             data.forEach(stock => {
                 const card = document.createElement('div');
                 card.className = 'stock-card';
-                card.setAttribute('data-sector', stock.sector);
+                card.onclick = function() { this.classList.toggle('expanded'); };
                 
                 const macdClass = stock.macd === '+' ? 'pos' : 'neg';
                 const smaClass = stock.sma === 'up' ? 'pos' : 'neg';
                 
                 card.innerHTML = `
                     <div class="stock-header">
-                        <div>
+                        <div class="ticker-wrapper">
                             <div class="ticker">${stock.ticker}</div>
                             <div class="sector-tag">${stock.sector}</div>
                         </div>
                         ${stock.rr > 0 ? `<div class="rr-badge">R/R ${stock.rr}</div>` : '<div></div>'}
                     </div>
-                    <div class="price-info">
-                        <div class="info-box">
-                            <span class="info-label">Support</span>
-                            <span class="info-value">${stock.support}</span>
+                    
+                    <div class="expand-hint">▼ Click to see details</div>
+
+                    <div class="card-details">
+                        <div class="price-info">
+                            <div class="info-box">
+                                <span class="info-label">Support</span>
+                                <span class="info-value">${stock.support}</span>
+                            </div>
+                            <div class="info-box">
+                                <span class="info-label">Target Price</span>
+                                <span class="info-value" style="color: var(--accent-blue)">${stock.tp}</span>
+                            </div>
+                            <div class="info-box">
+                                <span class="info-label">Resistance</span>
+                                <span class="info-value">${stock.resistance}</span>
+                            </div>
+                            <div class="info-box">
+                                <span class="info-label">Stop Loss</span>
+                                <span class="info-value" style="color: var(--accent-red)">${stock.sl}</span>
+                            </div>
                         </div>
-                        <div class="info-box">
-                            <span class="info-label">Target Price</span>
-                            <span class="info-value" style="color: var(--accent-blue)">${stock.tp}</span>
+                        <div class="technical-indicators">
+                            <span class="indicator">MACD: <b class="${macdClass}">${stock.macd}</b></span>
+                            <span class="indicator">SMA: <b class="${smaClass}">${stock.sma}</b></span>
                         </div>
-                        <div class="info-box">
-                            <span class="info-label">Resistance</span>
-                            <span class="info-value">${stock.resistance}</span>
-                        </div>
-                        <div class="info-box">
-                            <span class="info-label">Stop Loss</span>
-                            <span class="info-value" style="color: var(--accent-red)">${stock.sl}</span>
-                        </div>
+                        <div class="note">${stock.note}</div>
                     </div>
-                    <div class="technical-indicators">
-                        <span class="indicator">MACD: <b class="${macdClass}">${stock.macd}</b></span>
-                        <span class="indicator">SMA: <b class="${smaClass}">${stock.sma}</b></span>
-                    </div>
-                    <div class="note" title="${stock.note}">${stock.note}</div>
                 `;
                 grid.appendChild(card);
             });
@@ -609,7 +654,7 @@
                 const btnSector = btn.getAttribute('data-sector');
                 btn.classList.toggle('active', btnSector === sector);
             });
-            if (window.innerWidth <= 768) toggleSidebar(); // Auto-close on mobile
+            if (window.innerWidth <= 768) toggleSidebar(); 
             applyFilters();
         }
 
@@ -632,24 +677,15 @@
             const search = document.getElementById('searchInput').value.toUpperCase();
             
             let filtered = stockData.filter(stock => {
-                // Sector Filter
                 if (currentSector !== 'all' && stock.sector !== currentSector) return false;
-                
-                // Search Filter
                 if (search && !stock.ticker.includes(search)) return false;
-                
-                // Tech Filters (Working Independently)
                 if (techFilters.rr && stock.rr < 1.5) return false;
                 if (techFilters.macd && stock.macd !== '+') return false;
                 if (techFilters.sma && stock.sma !== 'up') return false;
-                
-                // Bullish Only Filter (Combine MACD + SMA + RR)
                 if (techFilters.bull && (stock.macd !== '+' || stock.sma !== 'up' || stock.rr < 1.5)) return false;
-                
                 return true;
             });
 
-            // Apply Sorting
             if (currentSort === 'az') {
                 filtered.sort((a, b) => a.ticker.localeCompare(b.ticker));
             } else if (currentSort === 'rr') {
@@ -674,7 +710,6 @@
             applyFilters();
         }
 
-        // Initial render
         applyFilters();
     </script>
 </body>
