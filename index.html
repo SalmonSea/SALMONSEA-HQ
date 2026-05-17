@@ -265,13 +265,13 @@
 
         /* --- Updated Stable Grid & Cards --- */
         .dashboard-grid {
-            padding: 20px 15px 40px; /* Increased bottom padding */
+            padding: 20px 15px 10px;
             overflow-y: auto;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             flex-grow: 1;
-            align-content: start; /* Prevent items from stretching */
+            align-content: start;
         }
 
         .stock-card {
@@ -293,7 +293,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Hide details by default with height 0 instead of max-height */
         .card-details {
             display: none;
             opacity: 0;
@@ -318,6 +317,18 @@
 
         .stock-card:hover .expand-hint, .stock-card.expanded .expand-hint {
             display: none;
+        }
+
+        /* Global Footer Signature */
+        .global-footer {
+            padding: 20px;
+            text-align: center;
+            background-color: var(--bg-color);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: #30363d;
+            letter-spacing: 2px;
+            font-weight: bold;
         }
 
         /* Mobile Adjustments */
@@ -364,7 +375,7 @@
             font-weight: bold;
             color: white;
             line-height: 1.2;
-            word-break: break-word; /* Fix long ticker wrap */
+            word-break: break-word;
         }
 
         .sector-tag {
@@ -505,7 +516,6 @@
         </header>
 
         <div class="sort-controls">
-            <span style="font-size: 0.8rem; color: #8b949e;">Sort:</span>
             <button class="sort-btn active" id="sortNone" onclick="setSort('none')">➖ Default</button>
             <button class="sort-btn" id="sortAZ" onclick="setSort('az')">⬇️ A-Z</button>
             <button class="sort-btn" id="sortRR" onclick="setSort('rr')">🔥 R/R (High-Low)</button>
@@ -513,6 +523,10 @@
 
         <div class="dashboard-grid" id="dashboardGrid">
             <!-- Cards will be generated here -->
+        </div>
+
+        <div class="global-footer">
+            POWERED BY <span class="rainbow-text">GEMINI x SALMONSEA</span>
         </div>
     </div>
 
@@ -602,7 +616,15 @@
             data.forEach(stock => {
                 const card = document.createElement('div');
                 card.className = 'stock-card';
-                card.onclick = function() { this.classList.toggle('expanded'); };
+                card.onclick = function() { 
+                    const isExpanded = this.classList.contains('expanded');
+                    // Accordion Logic: Close all cards first
+                    document.querySelectorAll('.stock-card').forEach(c => c.classList.remove('expanded'));
+                    // If the clicked card wasn't expanded, expand it
+                    if (!isExpanded) {
+                        this.classList.add('expanded');
+                    }
+                };
                 
                 const macdClass = stock.macd === '+' ? 'pos' : 'neg';
                 const smaClass = stock.sma === 'up' ? 'pos' : 'neg';
