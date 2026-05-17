@@ -14,9 +14,10 @@
             --accent-red: #f85149;
             --accent-yellow: #d29922;
             --border-color: #30363d;
-            --sidebar-width: 250px;
-            --header-height: 125px; /* Estimated Search + Sort height */
+            --sidebar-width: 260px;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,94 +27,96 @@
             display: flex;
             height: 100vh;
             width: 100vw;
-            overflow: hidden; /* Lock main viewport */
-            position: fixed; /* Prevent mobile pull-to-refresh and sinking */
+            overflow: hidden; /* Lock main body scroll */
         }
 
-        /* Sidebar */
+        /* Sidebar - Fixed to the left */
         .sidebar {
             width: var(--sidebar-width);
             background-color: var(--card-bg);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 25px 20px;
+            flex-shrink: 0;
+            z-index: 2000;
             transition: transform 0.3s ease;
-            z-index: 3000; /* Highest level */
         }
 
         .sidebar h2 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 1.25rem;
+            margin-bottom: 25px;
             color: var(--accent-blue);
+            font-weight: 800;
+            letter-spacing: 1px;
         }
 
         .filter-btn {
             background: none;
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
             cursor: pointer;
             text-align: left;
             transition: all 0.2s;
+            font-size: 0.9rem;
         }
 
         .filter-btn:hover, .filter-btn.active {
             background-color: var(--accent-blue);
             color: white;
             border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
         }
 
         .powered-by-sidebar {
             margin-top: auto;
-            font-size: 0.65rem;
-            color: #30363d;
+            font-size: 0.7rem;
+            color: #484f58;
             letter-spacing: 1px;
             text-transform: uppercase;
             font-weight: bold;
             border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-            margin-bottom: 5px;
+            padding-top: 20px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
+            gap: 6px;
         }
 
-        .powered-by-sidebar span {
-            color: var(--accent-blue);
-            line-height: 1.4;
+        /* Rainbow Effect */
+        .rainbow-text {
+            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            animation: shine 4s linear infinite;
+            font-weight: 800;
         }
 
-        /* Main Content Area */
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Main Content - Flex column */
         .main-content {
             flex: 1;
-            position: relative;
-            height: 100vh;
             display: flex;
             flex-direction: column;
-            background-color: var(--bg-color);
             min-width: 0;
+            height: 100vh;
+            position: relative;
         }
 
-        /* Immortal Header (Fixed to Top) */
-        .immortal-nav {
-            position: fixed;
-            top: 0;
-            left: 0; /* Will be offset by sidebar width on desktop */
-            right: 0;
-            z-index: 2000;
+        /* Header Area - Static at top of main-content */
+        .nav-container {
+            flex-shrink: 0;
             background-color: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-        }
-
-        /* Layout adjustment for Sidebar */
-        @media (min-width: 769px) {
-            .immortal-nav { left: var(--sidebar-width); }
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         header {
@@ -122,14 +125,7 @@
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-        }
-
-        .controls-container {
-            display: flex;
-            align-items: center;
             gap: 15px;
-            flex-grow: 1;
-            min-width: 0;
         }
 
         .menu-toggle {
@@ -137,52 +133,60 @@
             background: none;
             border: 1px solid var(--border-color);
             color: white;
-            font-size: 1.2rem;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
         }
 
+        .search-container {
+            width: 180px;
+            flex-shrink: 0;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 0.85rem;
+        }
+
         .tech-filters-wrapper {
-            display: flex;
-            align-items: center;
+            flex: 1;
             overflow: hidden;
             position: relative;
-            flex-grow: 1;
+            display: flex;
+            align-items: center;
         }
 
         .tech-filters-wrapper::after {
             content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 100%;
-            width: 40px;
+            position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
             background: linear-gradient(to right, transparent, var(--card-bg));
             pointer-events: none;
         }
 
         .tech-filters {
             display: flex;
-            gap: 8px;
-            align-items: center;
+            gap: 10px;
             overflow-x: auto;
             padding: 5px 40px 5px 5px;
             scrollbar-width: none;
         }
-
         .tech-filters::-webkit-scrollbar { display: none; }
 
         .filter-pill {
             background-color: var(--bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 6px 12px;
+            padding: 8px 15px;
             border-radius: 20px;
             font-size: 0.75rem;
             cursor: pointer;
-            transition: all 0.2s;
             white-space: nowrap;
+            transition: all 0.2s;
         }
 
         .filter-pill.active {
@@ -191,34 +195,29 @@
             color: var(--accent-blue);
         }
 
-        .filter-pill.active.bull {
-            background-color: rgba(63, 185, 80, 0.15);
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-        }
-
         .sort-controls {
             padding: 12px 20px;
             display: flex;
             gap: 12px;
-            align-items: center;
+            overflow-x: auto;
+            scrollbar-width: none;
             background-color: var(--bg-color);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+        .sort-controls::-webkit-scrollbar { display: none; }
 
         .sort-btn {
             background-color: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
             color: #8b949e;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-size: 0.8rem;
             cursor: pointer;
+            white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            white-space: nowrap;
+            gap: 8px;
         }
 
         .sort-btn.active {
@@ -227,123 +226,104 @@
             border-color: var(--accent-blue);
         }
 
-        /* Scrollable Grid */
-        .dashboard-grid {
-            padding: calc(var(--header-height) + 20px) 15px 40px;
-            height: 100vh;
+        /* Scrollable Area */
+        .scroll-area {
+            flex: 1;
             overflow-y: auto;
-            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-grid {
+            padding: 25px 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
             gap: 20px;
             align-content: start;
-            -webkit-overflow-scrolling: touch;
         }
 
         .stock-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 18px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             height: fit-content;
-            min-height: 70px;
-            display: flex;
-            flex-direction: column;
+        }
+
+        .stock-card.expanded {
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-5px);
         }
 
         @media (hover: hover) {
             .stock-card:hover {
-                transform: translateY(-5px);
                 border-color: var(--accent-blue);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                transform: translateY(-5px);
             }
-            .stock-card:hover .card-details {
-                display: block;
-                opacity: 1;
-                transform: translateY(0);
-                margin-top: 15px;
-            }
-            .stock-card:hover .expand-hint { display: none; }
         }
-
-        .stock-card.expanded {
-            transform: translateY(-5px);
-            border-color: var(--accent-blue);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .stock-card.expanded .card-details {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-            margin-top: 15px;
-        }
-
-        .stock-card.expanded .expand-hint { display: none; }
 
         .card-details {
             display: none;
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s ease;
+            margin-top: 15px;
         }
 
-        .expand-hint {
-            font-size: 0.65rem;
-            color: #30363d;
-            text-align: left;
-            margin-top: 5px;
+        .stock-card.expanded .card-details {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* Integrated Footer (Inside Grid) */
         .grid-footer {
-            grid-column: 1 / -1; /* Stretch across all columns */
-            padding: 40px 20px;
+            margin-top: auto;
+            padding: 50px 20px;
             text-align: center;
             font-size: 0.75rem;
             color: #30363d;
             letter-spacing: 2px;
             font-weight: bold;
             border-top: 1px solid var(--border-color);
-            margin-top: 20px;
         }
 
-        /* Mobile Adjustments */
+        /* Mobile Viewports */
         @media (max-width: 768px) {
-            :root { --header-height: 115px; }
-
             .sidebar {
                 position: fixed;
-                height: 100vh;
+                left: 0; top: 0; bottom: 0;
                 transform: translateX(-100%);
-                box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+                box-shadow: 10px 0 40px rgba(0,0,0,0.7);
             }
-
             .sidebar.open { transform: translateX(0); }
             .menu-toggle { display: block; }
-
-            header { padding: 10px 15px; }
-            .search-container { max-width: 100px; }
-            .sort-controls { padding: 10px 15px; overflow-x: auto; scrollbar-width: none; }
+            .search-container { width: 130px; }
+            header { padding: 10px 15px; gap: 10px; }
+            .tech-filters { padding-right: 20px; }
         }
 
+        /* Card Content Styles */
         .stock-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-        .ticker-wrapper { flex: 1; min-width: 0; }
-        .ticker { font-size: 1.15rem; font-weight: bold; color: white; line-height: 1.2; word-break: break-word; }
-        .sector-tag { font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; background-color: rgba(88, 166, 255, 0.1); color: var(--accent-blue); margin-top: 2px; display: inline-block; }
-        .price-info { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .info-box { background-color: rgba(255, 255, 255, 0.04); padding: 8px; border-radius: 6px; text-align: center; }
-        .info-label { font-size: 0.65rem; color: #8b949e; display: block; margin-bottom: 2px; }
-        .info-value { font-size: 0.9rem; font-weight: bold; }
-        .technical-indicators { display: flex; gap: 8px; margin-bottom: 12px; }
-        .indicator { font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; background-color: rgba(255, 255, 255, 0.03); }
+        .ticker { font-size: 1.2rem; font-weight: 800; color: white; line-height: 1.2; word-break: break-word; }
+        .sector-tag { font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; background-color: rgba(88, 166, 255, 0.1); color: var(--accent-blue); margin-top: 4px; display: inline-block; font-weight: bold; }
+        .rr-badge { background-color: var(--accent-green); color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+        .price-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .info-box { background-color: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 8px; text-align: center; }
+        .info-label { font-size: 0.6rem; color: #8b949e; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .info-value { font-size: 0.95rem; font-weight: bold; }
+        .technical-indicators { display: flex; gap: 10px; margin-bottom: 15px; }
+        .indicator { font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); }
         .pos { color: var(--accent-green); }
         .neg { color: var(--accent-red); }
-        .note { font-size: 0.75rem; font-style: italic; color: #8b949e; border-top: 1px solid var(--border-color); padding-top: 8px; line-height: 1.4; }
-        .rr-badge { background-color: var(--accent-green); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; flex-shrink: 0; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 2500; }
+        .note { font-size: 0.75rem; font-style: italic; color: #8b949e; border-top: 1px solid var(--border-color); padding-top: 10px; line-height: 1.5; }
+        .expand-hint { font-size: 0.65rem; color: #30363d; margin-top: 8px; }
+        .stock-card.expanded .expand-hint { display: none; }
+
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1500; }
         .sidebar-overlay.active { display: block; }
         #mobileCloseBtn { display: none; background: none; border: none; color: #8b949e; font-size: 1.5rem; cursor: pointer; }
         @media (max-width: 768px) { #mobileCloseBtn { display: block; } }
@@ -351,8 +331,9 @@
 </head>
 <body>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    
     <div class="sidebar" id="sidebar">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <h2 style="margin: 0;">Mission Control</h2>
             <button id="mobileCloseBtn" onclick="toggleSidebar()">✕</button>
         </div>
@@ -363,31 +344,29 @@
         <button class="filter-btn" data-sector="Titan" onclick="setSector('Titan')">Tech Titans</button>
         
         <div class="powered-by-sidebar">
-            Power by
-            <span class="rainbow-text" style="font-size: 0.75rem;">GEMINI x SALMONSEA</span>
+            POWERED BY
+            <span class="rainbow-text" style="font-size: 0.8rem;">GEMINI x SALMONSEA</span>
         </div>
 
-        <div style="font-size: 0.8rem; color: #8b949e;">
+        <div style="font-size: 0.75rem; color: #484f58; margin-top: 10px;">
             Last Update: 16 May 2026
         </div>
     </div>
 
     <div class="main-content">
-        <div class="immortal-nav">
+        <div class="nav-container">
             <header>
-                <div class="controls-container">
-                    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-                    <div class="search-container">
-                        <input type="text" id="searchInput" placeholder="Search ticker..." onkeyup="applyFilters()">
-                    </div>
-                    <div class="tech-filters-wrapper">
-                        <div class="tech-filters">
-                            <button class="filter-pill" id="filterRR" onclick="toggleTechFilter('rr')">R/R > 1.5</button>
-                            <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">MACD (+)</button>
-                            <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">SMA Up</button>
-                            <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">🔥 Bullish Only</button>
-                            <span style="font-size: 0.75rem; color: #8b949e; cursor: pointer; text-decoration: underline; margin-left: 5px; white-space: nowrap;" onclick="resetAllFilters()">Clear All</span>
-                        </div>
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Ticker..." onkeyup="applyFilters()">
+                </div>
+                <div class="tech-filters-wrapper">
+                    <div class="tech-filters">
+                        <button class="filter-pill" id="filterRR" onclick="toggleTechFilter('rr')">R/R > 1.5</button>
+                        <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">MACD (+)</button>
+                        <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">SMA Up</button>
+                        <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">🔥 Bullish</button>
+                        <span style="font-size: 0.7rem; color: #8b949e; cursor: pointer; text-decoration: underline; white-space: nowrap; align-self: center;" onclick="resetAllFilters()">Clear</span>
                     </div>
                 </div>
             </header>
@@ -399,8 +378,13 @@
             </div>
         </div>
 
-        <div class="dashboard-grid" id="dashboardGrid">
-            <!-- Cards will be generated here -->
+        <div class="scroll-area" id="scrollContainer">
+            <div class="dashboard-grid" id="dashboardGrid">
+                <!-- Cards here -->
+            </div>
+            <div class="grid-footer" id="gridFooter">
+                POWERED BY <span class="rainbow-text">GEMINI x SALMONSEA</span>
+            </div>
         </div>
     </div>
 
@@ -472,6 +456,7 @@
 
         function renderCards(data) {
             const grid = document.getElementById('dashboardGrid');
+            const scrollContainer = document.getElementById('scrollContainer');
             grid.innerHTML = '';
             
             data.forEach(stock => {
@@ -482,12 +467,11 @@
                     document.querySelectorAll('.stock-card.expanded').forEach(c => {
                         if (c !== this) c.classList.remove('expanded');
                     });
-
                     this.classList.toggle('expanded');
                     
                     if (window.innerWidth <= 768 && this.classList.contains('expanded')) {
                         setTimeout(() => {
-                           grid.scrollTo({
+                           scrollContainer.scrollTo({
                                top: this.offsetTop - 10,
                                behavior: 'smooth'
                            });
@@ -496,8 +480,6 @@
                 };
                 
                 const macdClass = stock.macd === '+' ? 'pos' : 'neg';
-                const smaClass = stock.sma === 'up' ? 'pos' : 'neg';
-                
                 card.innerHTML = `
                     <div class="stock-header">
                         <div class="ticker-wrapper">
@@ -516,19 +498,13 @@
                         </div>
                         <div class="technical-indicators">
                             <span class="indicator">MACD: <b class="${macdClass}">${stock.macd}</b></span>
-                            <span class="indicator">SMA: <b class="${smaClass}">${stock.sma}</b></span>
+                            <span class="indicator">SMA: <b class="${stock.sma === 'up' ? 'pos' : 'neg'}">${stock.sma}</b></span>
                         </div>
                         <div class="note">${stock.note}</div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
-
-            // Add Footer inside Grid (Mobile only logic handled by CSS)
-            const footer = document.createElement('div');
-            footer.className = 'grid-footer';
-            footer.innerHTML = `POWERED BY <span class="rainbow-text">GEMINI x SALMONSEA</span>`;
-            grid.appendChild(footer);
         }
 
         function setSector(sector) {
