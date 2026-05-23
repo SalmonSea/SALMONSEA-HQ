@@ -4,24 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Stock Tracker Dashboard 🚀</title>
+    
+    <!-- Google Fonts for premium modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --text-color: #c9d1d9;
+            --bg-color: #080c14;
+            --card-bg: rgba(22, 27, 34, 0.5);
+            --card-bg-hover: rgba(30, 38, 50, 0.85);
+            --text-color: #e6edf3;
+            --text-muted: #8b949e;
             --accent-blue: #58a6ff;
+            --accent-blue-glow: rgba(88, 166, 255, 0.2);
             --accent-green: #3fb950;
+            --accent-green-glow: rgba(63, 185, 80, 0.2);
             --accent-red: #f85149;
+            --accent-red-glow: rgba(248, 81, 73, 0.2);
             --accent-yellow: #d29922;
-            --border-color: #30363d;
-            --sidebar-width: 260px;
+            --accent-purple: #ab7df6;
+            --accent-purple-glow: rgba(171, 125, 246, 0.25);
+            --border-color: rgba(48, 54, 61, 0.6);
+            --border-glow: rgba(88, 166, 255, 0.15);
+            --sidebar-width: 280px;
+            --backdrop-blur: blur(16px);
         }
 
         * { box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Outfit', 'Noto Sans Thai', sans-serif;
+            background: radial-gradient(circle at 50% 50%, #0d162a 0%, #05070c 100%);
             color: var(--text-color);
             margin: 0;
             display: flex;
@@ -30,62 +45,81 @@
             overflow: hidden; 
         }
 
-        /* Sidebar */
+        /* Sidebar Glassmorphism */
         .sidebar {
             width: var(--sidebar-width);
-            background-color: var(--card-bg);
+            background: rgba(13, 17, 23, 0.7);
+            backdrop-filter: var(--backdrop-blur);
+            -webkit-backdrop-filter: var(--backdrop-blur);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            padding: 25px 20px;
+            padding: 30px 20px;
             flex-shrink: 0;
             z-index: 2000;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar h2 {
-            font-size: 1.25rem;
-            margin-bottom: 25px;
-            color: var(--accent-blue);
+            font-size: 1.35rem;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #58a6ff 0%, #ab7df6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 800;
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .filter-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 12px 15px;
+            padding: 14px 16px;
             margin-bottom: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
-            font-size: 0.9rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .filter-btn:hover, .filter-btn.active {
-            background-color: var(--accent-blue);
-            color: white;
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(3px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.15) 0%, rgba(171, 125, 246, 0.15) 100%);
+            color: #ffffff;
             border-color: var(--accent-blue);
+            box-shadow: 0 4px 15px rgba(88, 166, 255, 0.1);
         }
 
         .powered-by-sidebar {
             margin-top: auto;
             font-size: 0.7rem;
-            color: #484f58;
-            letter-spacing: 1px;
+            color: #586069;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 800;
             border-top: 1px solid var(--border-color);
-            padding-top: 20px;
+            padding-top: 25px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .rainbow-text {
-            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570, #4285f4);
+            background: linear-gradient(90deg, #4285f4, #a067ff, #ff6b8b, #4285f4);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -93,6 +127,7 @@
             display: inline-block;
             animation: shine 4s linear infinite;
             font-weight: 800;
+            letter-spacing: 1px;
         }
 
         @keyframes shine {
@@ -111,43 +146,56 @@
 
         .nav-container {
             flex-shrink: 0;
-            background-color: var(--bg-color);
+            background-color: rgba(8, 12, 20, 0.4);
+            backdrop-filter: var(--backdrop-blur);
+            -webkit-backdrop-filter: var(--backdrop-blur);
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--border-color);
         }
 
         header {
-            padding: 15px 20px;
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
+            padding: 20px 24px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .menu-toggle {
             display: none;
-            background: none;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 10px 14px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .search-container {
-            width: 180px;
+            width: 220px;
             flex-shrink: 0;
         }
 
         #searchInput {
             width: 100%;
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
-            background-color: var(--bg-color);
+            background-color: rgba(13, 17, 23, 0.6);
             color: var(--text-color);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 10px var(--accent-blue-glow);
+            background-color: rgba(13, 17, 23, 0.9);
         }
 
         .tech-filters-wrapper {
@@ -161,13 +209,13 @@
         .tech-filters-wrapper::after {
             content: '';
             position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
-            background: linear-gradient(to right, transparent, var(--card-bg));
+            background: linear-gradient(to right, transparent, #080c14);
             pointer-events: none;
         }
 
         .tech-filters {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             overflow-x: auto;
             padding: 5px 40px 5px 5px;
             scrollbar-width: none;
@@ -175,51 +223,66 @@
         .tech-filters::-webkit-scrollbar { display: none; }
 
         .filter-pill {
-            background-color: var(--bg-color);
+            background-color: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            color: var(--text-muted);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: all 0.25s;
+        }
+
+        .filter-pill:hover {
+            color: var(--text-color);
+            border-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .filter-pill.active {
-            background-color: rgba(88, 166, 255, 0.15);
+            background-color: rgba(88, 166, 255, 0.12);
             border-color: var(--accent-blue);
             color: var(--accent-blue);
+            box-shadow: 0 2px 10px rgba(88, 166, 255, 0.15);
         }
 
         .sort-controls {
-            padding: 12px 20px;
+            padding: 14px 24px;
             display: flex;
             gap: 12px;
             overflow-x: auto;
             scrollbar-width: none;
-            background-color: var(--bg-color);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: rgba(5, 7, 12, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
         }
         .sort-controls::-webkit-scrollbar { display: none; }
 
         .sort-btn {
-            background-color: rgba(255, 255, 255, 0.03);
+            background-color: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
-            color: #8b949e;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .sort-btn:hover {
+            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .sort-btn.active {
             color: var(--accent-blue);
-            background-color: rgba(88, 166, 255, 0.1);
+            background-color: rgba(88, 166, 255, 0.08);
             border-color: var(--accent-blue);
         }
 
@@ -230,45 +293,126 @@
             -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
+            background: linear-gradient(180deg, rgba(8, 12, 20, 0.5) 0%, rgba(5, 7, 12, 0.8) 100%);
+        }
+
+        /* Dynamic Stats Banner */
+        .stats-banner {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 24px 24px 0 24px;
+        }
+
+        @media (max-width: 900px) {
+            .stats-banner { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .stats-banner { grid-template-columns: 1fr; }
+        }
+
+        .stat-card {
+            background: rgba(22, 27, 34, 0.35);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px;
+            backdrop-filter: var(--backdrop-blur);
+            -webkit-backdrop-filter: var(--backdrop-blur);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .stat-sub {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 6px;
         }
 
         .dashboard-grid {
-            padding: 25px 20px;
+            padding: 24px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 24px;
             align-content: start;
         }
 
+        /* Stock Cards Premium Look */
         .stock-card {
-            background-color: var(--card-bg);
+            background: var(--card-bg);
+            backdrop-filter: var(--backdrop-blur);
+            -webkit-backdrop-filter: var(--backdrop-blur);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 18px;
+            border-radius: 16px;
+            padding: 20px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             height: fit-content;
+            position: relative;
         }
+
+        /* Sector specific animations & glows */
+        .stock-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            border-radius: 4px 0 0 4px;
+            transition: all 0.3s;
+        }
+
+        .stock-card[data-sector="Nuclear"]::before { background-color: var(--accent-green); }
+        .stock-card[data-sector="Quantum"]::before { background-color: var(--accent-purple); }
+        .stock-card[data-sector="Titan"]::before { background-color: var(--accent-yellow); }
+        .stock-card[data-sector="DR"]::before { background-color: var(--accent-blue); }
 
         .stock-card.expanded {
-            border-color: var(--accent-blue);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
 
-        @media (hover: hover) {
-            .stock-card:hover {
-                border-color: var(--accent-blue);
-                transform: translateY(-5px);
-            }
+        .stock-card[data-sector="Nuclear"].expanded, .stock-card[data-sector="Nuclear"]:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 8px 30px var(--accent-green-glow);
+        }
+
+        .stock-card[data-sector="Quantum"].expanded, .stock-card[data-sector="Quantum"]:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 8px 30px var(--accent-purple-glow);
+        }
+
+        .stock-card[data-sector="Titan"].expanded, .stock-card[data-sector="Titan"]:hover {
+            border-color: var(--accent-yellow);
+            box-shadow: 0 8px 30px rgba(210, 153, 34, 0.25);
+        }
+
+        .stock-card[data-sector="DR"].expanded, .stock-card[data-sector="DR"]:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 8px 30px var(--accent-blue-glow);
         }
 
         .card-details {
             display: none;
             opacity: 0;
             transform: translateY(10px);
-            transition: all 0.3s ease;
-            margin-top: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 20px;
         }
 
         .stock-card.expanded .card-details {
@@ -279,12 +423,12 @@
 
         .grid-footer {
             margin-top: auto;
-            padding: 50px 20px;
+            padding: 60px 24px;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: #30363d;
             letter-spacing: 2px;
-            font-weight: bold;
+            font-weight: 700;
             border-top: 1px solid var(--border-color);
         }
 
@@ -294,60 +438,220 @@
                 position: fixed;
                 left: 0; top: 0; bottom: 0;
                 transform: translateX(-100%);
-                box-shadow: 10px 0 40px rgba(0,0,0,0.7);
+                box-shadow: 10px 0 40px rgba(0,0,0,0.85);
             }
             .sidebar.open { transform: translateX(0); }
             .menu-toggle { display: block; }
-            .search-container { width: 110px; } /* Slightly narrower to fit pills */
-            header { padding: 10px; gap: 8px; }
-            .tech-filters { padding-right: 20px; gap: 8px; }
-            .filter-pill { padding: 6px 12px; font-size: 0.7rem; }
+            .search-container { width: 140px; }
+            header { padding: 15px; gap: 12px; }
+            .tech-filters { padding-right: 20px; gap: 10px; }
+            .filter-pill { padding: 8px 14px; font-size: 0.75rem; }
         }
 
         /* Card Content Styles */
-        .stock-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-        .ticker { font-size: 1.15rem; font-weight: 800; color: white; line-height: 1.2; word-break: break-word; }
-        .sector-tag { font-size: 0.65rem; padding: 3px 8px; border-radius: 12px; background-color: rgba(88, 166, 255, 0.1); color: var(--accent-blue); margin-top: 4px; display: inline-block; font-weight: bold; }
-        .rr-badge { background-color: var(--accent-green); color: white; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
-        .price-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .info-box { background-color: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 8px; text-align: center; }
-        .info-label { font-size: 0.6rem; color: #8b949e; text-transform: uppercase; margin-bottom: 4px; display: block; }
-        .info-value { font-size: 0.95rem; font-weight: bold; }
-        .technical-indicators { display: flex; gap: 10px; margin-bottom: 15px; }
-        .indicator { font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; background-color: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); }
-        .pos { color: var(--accent-green); }
-        .neg { color: var(--accent-red); }
-        .note { font-size: 0.75rem; font-style: italic; color: #8b949e; border-top: 1px solid var(--border-color); padding-top: 10px; line-height: 1.5; }
-        .expand-hint { font-size: 0.65rem; color: #30363d; margin-top: 8px; }
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .ticker {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+        .sector-tag {
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 6px;
+            display: inline-block;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stock-card[data-sector="Nuclear"] .sector-tag { background-color: rgba(63, 185, 80, 0.1); color: var(--accent-green); }
+        .stock-card[data-sector="Quantum"] .sector-tag { background-color: rgba(171, 125, 246, 0.1); color: var(--accent-purple); }
+        .stock-card[data-sector="Titan"] .sector-tag { background-color: rgba(210, 153, 34, 0.1); color: var(--accent-yellow); }
+        .stock-card[data-sector="DR"] .sector-tag { background-color: rgba(88, 166, 255, 0.1); color: var(--accent-blue); }
+
+        .rr-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .rr-badge.high { background-color: var(--accent-green); color: #080c14; }
+        .rr-badge.low { background-color: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--border-color); }
+
+        .price-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .info-box {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .info-box:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+        }
+        .info-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+        .info-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .technical-indicators {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .indicator {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            flex: 1;
+            text-align: center;
+            font-weight: 500;
+        }
+        .pos { color: var(--accent-green); font-weight: 700; }
+        .neg { color: var(--accent-red); font-weight: 700; }
+
+        .note {
+            font-size: 0.82rem;
+            color: #b1bac4;
+            border-top: 1px solid var(--border-color);
+            padding-top: 14px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .expand-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .stock-card:hover .expand-hint { color: var(--text-color); }
         .stock-card.expanded .expand-hint { display: none; }
 
-        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1500; }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1500; backdrop-filter: blur(4px); }
         .sidebar-overlay.active { display: block; }
-        #mobileCloseBtn { display: none; background: none; border: none; color: #8b949e; font-size: 1.5rem; cursor: pointer; }
+        #mobileCloseBtn { display: none; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
         @media (max-width: 768px) { #mobileCloseBtn { display: block; } }
+
+        /* Mini Target Visualizer Range styles */
+        .visual-range {
+            margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 14px;
+        }
+        .range-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .range-bar-wrapper {
+            position: relative;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            margin: 12px 0;
+        }
+        .range-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, rgba(248, 81, 73, 0.4) 0%, rgba(63, 185, 80, 0.4) 40%, rgba(88, 166, 255, 0.5) 100%);
+        }
+        .range-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+        }
+        .marker-support {
+            background-color: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+        .marker-resistance {
+            background-color: var(--accent-yellow);
+            box-shadow: 0 0 8px var(--accent-yellow);
+        }
+        .range-info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     
     <div class="sidebar" id="sidebar">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="margin: 0;">Mission Control</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2 style="margin: 0;">🛰️ Salmonsea</h2>
             <button id="mobileCloseBtn" onclick="toggleSidebar()">✕</button>
         </div>
-        <button class="filter-btn active" data-sector="all" onclick="setSector('all')">All Assets</button>
-        <button class="filter-btn" data-sector="Nuclear" onclick="setSector('Nuclear')">Nuclear/Energy</button>
-        <button class="filter-btn" data-sector="Quantum" onclick="setSector('Quantum')">Quantum Computing</button>
-        <button class="filter-btn" data-sector="DR" onclick="setSector('DR')">Global DRs</button>
-        <button class="filter-btn" data-sector="Titan" onclick="setSector('Titan')">Tech Titans</button>
+        <button class="filter-btn active" data-sector="all" onclick="setSector('all')">
+            <span>All Assets</span>
+            <span style="font-size: 0.75rem; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 10px;" id="countAll">0</span>
+        </button>
+        <button class="filter-btn" data-sector="Nuclear" onclick="setSector('Nuclear')">
+            <span>Nuclear/Energy</span>
+            <span style="font-size: 0.75rem; background: rgba(63, 185, 80, 0.1); color: var(--accent-green); padding: 2px 8px; border-radius: 10px;" id="countNuclear">0</span>
+        </button>
+        <button class="filter-btn" data-sector="Quantum" onclick="setSector('Quantum')">
+            <span>Quantum Computing</span>
+            <span style="font-size: 0.75rem; background: rgba(171, 125, 246, 0.1); color: var(--accent-purple); padding: 2px 8px; border-radius: 10px;" id="countQuantum">0</span>
+        </button>
+        <button class="filter-btn" data-sector="DR" onclick="setSector('DR')">
+            <span>Global DRs</span>
+            <span style="font-size: 0.75rem; background: rgba(88, 166, 255, 0.1); color: var(--accent-blue); padding: 2px 8px; border-radius: 10px;" id="countDR">0</span>
+        </button>
+        <button class="filter-btn" data-sector="Titan" onclick="setSector('Titan')">
+            <span>Tech Titans</span>
+            <span style="font-size: 0.75rem; background: rgba(210, 153, 34, 0.1); color: var(--accent-yellow); padding: 2px 8px; border-radius: 10px;" id="countTitan">0</span>
+        </button>
         
         <div class="powered-by-sidebar">
-            POWERED BY
-            <span class="rainbow-text" style="font-size: 0.8rem;">GEMINI x SALMONSEA</span>
+            SYSTEM ENGINE
+            <span class="rainbow-text" style="font-size: 0.85rem;">GEMINI x SALMONSEA</span>
         </div>
 
-        <div style="font-size: 0.75rem; color: #484f58; margin-top: 10px;">
-            Last Update: 16 May 2026
+        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 12px; display: flex; flex-direction: column; gap: 4px;">
+            <span>📅 อัปเดตล่าสุด: 25 พฤษภาคม 2026</span>
+            <span>⏱️ ข้อมูลสัปดาห์: 25-29M5W4</span>
         </div>
     </div>
 
@@ -356,15 +660,15 @@
             <header>
                 <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
                 <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Ticker..." onkeyup="applyFilters()">
+                    <input type="text" id="searchInput" placeholder="ค้นหารหัสหุ้น / Ticker..." onkeyup="applyFilters()">
                 </div>
                 <div class="tech-filters-wrapper">
                     <div class="tech-filters">
-                        <button class="filter-pill" id="filterRR" onclick="toggleTechFilter('rr')">R/R > 1.5</button>
-                        <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">MACD (+)</button>
-                        <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">SMA Up</button>
-                        <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">🔥 Bullish</button>
-                        <span style="font-size: 0.7rem; color: #8b949e; cursor: pointer; text-decoration: underline; white-space: nowrap; align-self: center;" onclick="resetAllFilters()">Clear</span>
+                        <button class="filter-pill" id="filterRR" onclick="toggleTechFilter('rr')">🔥 R/R > 1.5</button>
+                        <button class="filter-pill" id="filterMACD" onclick="toggleTechFilter('macd')">📈 MACD (+)</button>
+                        <button class="filter-pill" id="filterSMA" onclick="toggleTechFilter('sma')">🚀 SMA Up</button>
+                        <button class="filter-pill" id="filterBull" onclick="toggleTechFilter('bull')">💎 Bullish Pick</button>
+                        <span style="font-size: 0.8rem; color: var(--accent-blue); cursor: pointer; text-decoration: underline; white-space: nowrap; align-self: center; font-weight: 600; margin-left: 8px;" onclick="resetAllFilters()">Clear Filters</span>
                     </div>
                 </div>
             </header>
@@ -377,11 +681,36 @@
         </div>
 
         <div class="scroll-area" id="scrollContainer">
-            <div class="dashboard-grid" id="dashboardGrid">
-                <!-- Cards -->
+            <!-- Dynamic Stats Banner -->
+            <div class="stats-banner" id="statsBanner">
+                <div class="stat-card">
+                    <div class="stat-label">🎯 Total Monitored</div>
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-sub">Assets in current filter</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">🔥 Bullish Assets</div>
+                    <div class="stat-value" id="statBullish" style="color: var(--accent-green)">0</div>
+                    <div class="stat-sub">MACD (+) & SMA Up</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">📊 Average R/R</div>
+                    <div class="stat-value" id="statAvgRR">0.00</div>
+                    <div class="stat-sub">Risk/Reward Ratio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">🚀 Top R/R Pick</div>
+                    <div class="stat-value" id="statTopPick" style="color: var(--accent-blue)">-</div>
+                    <div class="stat-sub">Highest potential R/R</div>
+                </div>
             </div>
+
+            <div class="dashboard-grid" id="dashboardGrid">
+                <!-- Dynamic Cards -->
+            </div>
+            
             <div class="grid-footer">
-                POWERED BY <span class="rainbow-text">GEMINI x SALMONSEA</span>
+                POWERED BY <span class="rainbow-text">GEMINI 3.5 FLASH x CAPTAIN SALMON</span>
             </div>
         </div>
     </div>
@@ -396,61 +725,661 @@
             document.getElementById('sidebarOverlay').classList.toggle('active');
         }
 
-        const stockData = [
-            // Nuclear & Energy
-            { ticker: "CCJ", sector: "Nuclear", support: "103.00", sl: "101.00", resistance: "122.00", tp: "141.00", rr: 1.54, macd: "+", sma: "up", note: "หลุุดแนวรับระยะสั้นมาแล้ว ต้องระวังหน่อย" },
-            { ticker: "CEG", sector: "Nuclear", support: "263.00", sl: "260.00", resistance: "300.00", tp: "300.00", rr: 0.56, macd: "-", sma: "down", note: "งบออกมาดี Guidance สวย แต่ดูเหมือนจะยังดีไม่พอแหะ" },
-            { ticker: "SMR", sector: "Nuclear", support: "10.50", sl: "8.80", resistance: "18.70", tp: "53.30", rr: 6.13, macd: "-", sma: "down", note: "หลุด POC" },
-            { ticker: "GEV", sector: "Nuclear", support: "832.50", sl: "777.00", resistance: "1064.50", tp: "1149.00", rr: 1.89, macd: "+", sma: "up", note: "เหมือนจะยังยืนได้ อาจสร้างฐานใหม่แถวๆ นี้" },
-            { ticker: "APD", sector: "Nuclear", support: "295.00", sl: "289.00", resistance: "305.00", tp: "336.00", rr: 1.39, macd: "+", sma: "up", note: "ยังคงยืนอยู่เหนือแนวรับสำคัญได้" },
-            { ticker: "BE", sector: "Nuclear", support: "163.00", sl: "131.00", resistance: "290.00", tp: "417.00", rr: 3.50, macd: "+", sma: "up", note: "เหมือนจะยังยืนได้ อาจสร้างฐานใหม่แถวๆ นี้" },
+        const stockDataRaw = [
+            {
+                        "ticker": "9988 (BABA80*)",
+                        "sector": "DR",
+                        "support": "123.00",
+                        "sl": "117.00",
+                        "resistance": "154.50",
+                        "tp": "185.00",
+                        "rr": 2.57,
+                        "macd": "-",
+                        "sma": "up",
+                        "note": "ยังเกาะกลุ่มอยู่ในแนวรับ"
+            },
+            {
+                        "ticker": "1810 (XIAOMI80)",
+                        "sector": "DR",
+                        "support": "29.00",
+                        "sl": "27.30",
+                        "resistance": "32.00",
+                        "tp": "32.00",
+                        "rr": 0.56,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ยังติดต้านระยะสั้น"
+            },
+            {
+                        "ticker": "3750 (CATL23*)",
+                        "sector": "DR",
+                        "support": "676.00",
+                        "sl": "606.00",
+                        "resistance": "702.00",
+                        "tp": "728.00",
+                        "rr": 0.45,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ยังคงยืนเหนือแนวรับได้"
+            },
+            {
+                        "ticker": "1347 (HUAHONG23)",
+                        "sector": "DR",
+                        "support": "115.00",
+                        "sl": "107.00",
+                        "resistance": "131.00",
+                        "tp": "147.00",
+                        "rr": 1.01,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ยังติดต้านอยู่"
+            },
+            {
+                        "ticker": "981 (SMIC23*)",
+                        "sector": "DR",
+                        "support": "77.00",
+                        "sl": "70.00",
+                        "resistance": "90.50",
+                        "tp": "104.00",
+                        "rr": 1.78,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ทะลุขึ้นมาเหนือต้าน น่า Follow buy"
+            },
+            {
+                        "ticker": "9880 (UBTECH23)",
+                        "sector": "DR",
+                        "support": "114.00",
+                        "sl": "104.00",
+                        "resistance": "146.00",
+                        "tp": "178.00",
+                        "rr": 2.33,
+                        "macd": "-",
+                        "sma": "up",
+                        "note": "ยืนเหนือแนวรับได้แข็งแกร่ง น่า Follow buy"
+            },
+            {
+                        "ticker": "8035 (TEL23*)",
+                        "sector": "DR",
+                        "support": "46,200.00",
+                        "sl": "39,700.00",
+                        "resistance": "53,500.00",
+                        "tp": "60,800.00",
+                        "rr": 1.95,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ลงมาแตะกรอบบนของแนวรับ และเด้งกลับ"
+            },
+            {
+                        "ticker": "6857 (ADVANT23)",
+                        "sector": "DR",
+                        "support": "25,800.00",
+                        "sl": "24,300.00",
+                        "resistance": "30,400.00",
+                        "tp": "35,000.00",
+                        "rr": 1.55,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ลงมาแตะแนวรับแล้วเด้งกลับ เป็น pin bar ดูน่าจะไปต่อได้"
+            },
+            {
+                        "ticker": "6861 (KEYENCE23)",
+                        "sector": "DR",
+                        "support": "72,500.00",
+                        "sl": "72,000.00",
+                        "resistance": "84,170.00",
+                        "tp": "95,840.00",
+                        "rr": 2.28,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ลงมาแตะแนวรับแล้วเด้งกลับ เป็น pin bar ดูน่าจะไปต่อได้"
+            },
+            {
+                        "ticker": "ASML (ASML01*)",
+                        "sector": "DR",
+                        "support": "1,210.00",
+                        "sl": "1,174.00",
+                        "resistance": "1,409.00",
+                        "tp": "1,608.00",
+                        "rr": 1.87,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ATH ไปสวยๆ"
+            },
+            {
+                        "ticker": "AMD (AMD80*)",
+                        "sector": "DR",
+                        "support": "424.00",
+                        "sl": "392.00",
+                        "resistance": "467.50",
+                        "tp": "511.00",
+                        "rr": 1.05,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "พลิกกลับมา ATH ได้เฉย แต่จุดนี้ต้องระวัง"
+            },
+            {
+                        "ticker": "AMZN (AMZN80*)",
+                        "sector": "DR",
+                        "support": "262.00",
+                        "sl": "258.00",
+                        "resistance": "272.50",
+                        "tp": "283.00",
+                        "rr": 0.67,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "เหมือนกำลังสร้างฐานใหม่"
+            },
+            {
+                        "ticker": "AVGO (AVGO80*)",
+                        "sector": "DR",
+                        "support": "399.00",
+                        "sl": "394.00",
+                        "resistance": "429.40",
+                        "tp": "459.80",
+                        "rr": 0.95,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "กำลังสร้างฐานใหม่"
+            },
+            {
+                        "ticker": "GOOG (GOOG80*)",
+                        "sector": "DR",
+                        "support": "377.50",
+                        "sl": "376.40",
+                        "resistance": "397.00",
+                        "tp": "416.50",
+                        "rr": 0.9,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "กำลังสร้างฐานใหม่"
+            },
+            {
+                        "ticker": "TSLA (TSLA80)",
+                        "sector": "DR",
+                        "support": "403.00",
+                        "sl": "389.00",
+                        "resistance": "431.00",
+                        "tp": "431.00",
+                        "rr": 0.38,
+                        "macd": "-",
+                        "sma": "up",
+                        "note": "ยังติดต้านอยู่"
+            },
+            {
+                        "ticker": "META (META80)",
+                        "sector": "DR",
+                        "support": "608.00",
+                        "sl": "592.00",
+                        "resistance": "679.00",
+                        "tp": "679.00",
+                        "rr": 0.74,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ยังยืนในกรอบได้ แต่เส้น 20/100 กำลังตัดลง ต้องระวัง"
+            },
+            {
+                        "ticker": "MSFT (MSFT80)",
+                        "sector": "DR",
+                        "support": "416.00",
+                        "sl": "395.70",
+                        "resistance": "458.00",
+                        "tp": "554.00",
+                        "rr": 2.69,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ยังยืนเหนือ POC ระยะยาวได้"
+            },
+            {
+                        "ticker": "NVDA (NVDA80*)",
+                        "sector": "DR",
+                        "support": "212.00",
+                        "sl": "210.00",
+                        "resistance": "230.00",
+                        "tp": "248.00",
+                        "rr": 1.16,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "มีแรงทำกำไร"
+            },
+            {
+                        "ticker": "LLY (LLY80*)",
+                        "sector": "DR",
+                        "support": "1,037.00",
+                        "sl": "998.00",
+                        "resistance": "1,080.00",
+                        "tp": "1,123.00",
+                        "rr": 0.58,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "แนวรับกรอบบนสุดท้าย แต่ผ่านไปได้ คงขึ้นต่อได้สบายๆ"
+            },
+            {
+                        "ticker": "SNDK (SNDK80)",
+                        "sector": "DR",
+                        "support": "1,294.00",
+                        "sl": "1,277.00",
+                        "resistance": "1,584.00",
+                        "tp": "1,874.00",
+                        "rr": 1.96,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "รอสร้างฐานใหม่"
+            },
+            {
+                        "ticker": "GEV (GEV80)",
+                        "sector": "DR",
+                        "support": "1,005.00",
+                        "sl": "972.00",
+                        "resistance": "1,149.00",
+                        "tp": "1,293.00",
+                        "rr": 1.72,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "น่าจะกำลังสร้างฐานใหม่"
+            },
+            {
+                        "ticker": "RKLB (RKLB80)",
+                        "sector": "DR",
+                        "support": "94.00",
+                        "sl": "60.40",
+                        "resistance": "135.70",
+                        "tp": "177.40",
+                        "rr": 2.48,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ATH อย่างแข็งแกร่ง"
+            },
+            {
+                        "ticker": "PLTR (PLTR23)",
+                        "sector": "DR",
+                        "support": "133.70",
+                        "sl": "126.00",
+                        "resistance": "156.00",
+                        "tp": "205.00",
+                        "rr": 2.15,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เกิดฐานแล้ว น่าเข้าสะสม"
+            },
+            {
+                        "ticker": "CCJ (CCJ23)",
+                        "sector": "DR",
+                        "support": "102.40",
+                        "sl": "100.40",
+                        "resistance": "116.00",
+                        "tp": "116.00",
+                        "rr": 0.57,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "แนวรับสุดท้าย ถ้าหลุดต้องถอย"
+            },
+            {
+                        "ticker": "WTI (OIL03)",
+                        "sector": "DR",
+                        "support": "91.70",
+                        "sl": "91.20",
+                        "resistance": "103.60",
+                        "tp": "115.50",
+                        "rr": 1.08,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ยังคงยืนเหนือแนวรับได้ และทำ Sideway"
+            },
+            {
+                        "ticker": "GOLD (GOLDUS80)",
+                        "sector": "DR",
+                        "support": "4,470.00",
+                        "sl": "4,460.00",
+                        "resistance": "4,680.00",
+                        "tp": "4,680.00",
+                        "rr": 0.38,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ยังไม่หลุดแนวรับสุดท้าย แต่ต้องระวัง"
+            },
+            {
+                        "ticker": "WDAY",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "OTEX",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "EPAM",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "up",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "IT",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "ADBE",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "DOCU",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "AMAT",
+                        "sector": "Titan",
+                        "support": "322.00",
+                        "sl": "314.00",
+                        "resistance": "439.00",
+                        "tp": "556.00",
+                        "rr": 3.41,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "เหมือนจะตึงตัว รอสร้างฐาน"
+            },
+            {
+                        "ticker": "KD",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "TDC",
+                        "sector": "Titan",
+                        "support": "33.00",
+                        "sl": "29.30",
+                        "resistance": "41.70",
+                        "tp": "41.70",
+                        "rr": 1.48,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ยังคงยืนอยู่แถวเส้น 200"
+            },
+            {
+                        "ticker": "Q",
+                        "sector": "Titan",
+                        "support": "144.00",
+                        "sl": "139.00",
+                        "resistance": "157.00",
+                        "tp": "170.00",
+                        "rr": 0.93,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ติดต้าน"
+            },
+            {
+                        "ticker": "ADSK",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "รอดูไปก่อนดีกว่า"
+            },
+            {
+                        "ticker": "BMI",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+            },
+            {
+                        "ticker": "CTSH",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "หลุดแนวรับ เส้น 20/200 ตัดลง รอดูไปก่อน"
+            },
+            {
+                        "ticker": "FICO",
+                        "sector": "Titan",
+                        "support": "-",
+                        "sl": "-",
+                        "resistance": "-",
+                        "tp": "-",
+                        "rr": 0.0,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "เหมือนจะยืนหลอก เพราะไม่มี Volumn ควรรอดูไปก่อน"
+            },
+            {
+                        "ticker": "ONTO",
+                        "sector": "Titan",
+                        "support": "228.00",
+                        "sl": "205.80",
+                        "resistance": "308.00",
+                        "tp": "389.00",
+                        "rr": 2.91,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "หลงมาเกือบแนวรับ แต่น่าจับตา อาจลงมาถึง"
+            },
+            {
+                        "ticker": "CEG",
+                        "sector": "Nuclear",
+                        "support": "267.00",
+                        "sl": "260.00",
+                        "resistance": "295.00",
+                        "tp": "295.00",
+                        "rr": 0.41,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ขึ้นมาหลังจากหลุด new low แต่ติดต้าน"
+            },
+            {
+                        "ticker": "SMR",
+                        "sector": "Nuclear",
+                        "support": "9.00",
+                        "sl": "8.80",
+                        "resistance": "13.00",
+                        "tp": "13.00",
+                        "rr": 0.59,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ขึ้ึ้นมาติดต้าน"
+            },
+            {
+                        "ticker": "APD",
+                        "sector": "Nuclear",
+                        "support": "253.60",
+                        "sl": "251.00",
+                        "resistance": "288.00",
+                        "tp": "288.00",
+                        "rr": 1.19,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "หลุดขอบบนแนวรับ"
+            },
+            {
+                        "ticker": "BE",
+                        "sector": "Nuclear",
+                        "support": "275.00",
+                        "sl": "259.00",
+                        "resistance": "302.50",
+                        "tp": "330.00",
+                        "rr": 0.7,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "รอสร้างฐานใหม่"
+            },
+            {
+                        "ticker": "IONQ",
+                        "sector": "Quantum",
+                        "support": "48.50",
+                        "sl": "45.00",
+                        "resistance": "74.00",
+                        "tp": "100.00",
+                        "rr": 2.84,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ปรับตัวขึ้นมาแรง รับข่าวทาง US ทุ่มทุน"
+            },
+            {
+                        "ticker": "RGTI",
+                        "sector": "Quantum",
+                        "support": "25.75",
+                        "sl": "23.40",
+                        "resistance": "44.20",
+                        "tp": "58.00",
+                        "rr": 3.59,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ปรับตัวขึ้นมาแรง รับข่าวทาง US ทุ่มทุน และน่า Follow Buy"
+            },
+            {
+                        "ticker": "IBM",
+                        "sector": "Quantum",
+                        "support": "252.60",
+                        "sl": "225.40",
+                        "resistance": "264.00",
+                        "tp": "308.00",
+                        "rr": 1.29,
+                        "macd": "-",
+                        "sma": "down",
+                        "note": "ปรับตัวขึ้นมาแรง รับข่าวทาง US ทุ่มทุน แต่ติดต้าน"
+            },
+            {
+                        "ticker": "FORM",
+                        "sector": "Quantum",
+                        "support": "125.00",
+                        "sl": "119.00",
+                        "resistance": "156.00",
+                        "tp": "188.00",
+                        "rr": 1.99,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ลงมาแตะขอบล่าง รอสร้างฐานต่อไป"
+            },
+            {
+                        "ticker": "COHR",
+                        "sector": "Quantum",
+                        "support": "344.40",
+                        "sl": "327.00",
+                        "resistance": "382.50",
+                        "tp": "420.60",
+                        "rr": 0.91,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ลงและขึ้นตามตลาด"
+            },
+            {
+                        "ticker": "MKSI",
+                        "sector": "Quantum",
+                        "support": "313.30",
+                        "sl": "301.50",
+                        "resistance": "320.60",
+                        "tp": "327.90",
+                        "rr": 0.27,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ลงและขึ้นตามตลาดทำ ATH เป็น Pin bar น่า Follow Buy"
+            }
+];
 
-            // Quantum Computing
-            { ticker: "IONQ", sector: "Quantum", support: "48.00", sl: "37.20", resistance: "74.00", tp: "100.00", rr: 3.17, macd: "-", sma: "down", note: "กลับมายืนเหนือแนวรับสำคัญได้ ดูน่าสนใจมากขึ้น แต่งบ 1Q26 ดูน่าสงสัย" },
-            { ticker: "RGTI", sector: "Quantum", support: "16.30", sl: "10.20", resistance: "25.60", tp: "47.50", rr: 4.02, macd: "-", sma: "down", note: "ดูเหมือนจะยืนได้และเกิดฐานใหญ่ขึ้นเรื่อยๆ" },
-            { ticker: "IBM", sector: "Quantum", support: "-", sl: "-", resistance: "-", tp: "-", rr: 0.00, macd: "-", sma: "down", note: "ทำ new low ไม่ผ่านเกณฑ์" },
-            { ticker: "FORM", sector: "Quantum", support: "124.00", sl: "121.00", resistance: "156.00", tp: "188.00", rr: 2.06, macd: "+", sma: "up", note: "ไม่ยอมลง อาจกำลังสร้างฐานใหม่" },
-            { ticker: "COHR", sector: "Quantum", support: "259.00", sl: "233.70", resistance: "382.45", tp: "505.90", rr: 2.99, macd: "+", sma: "up", note: "ATH บวกสวนตลาดอีกครั้ง" },
-            { ticker: "MKSI", sector: "Quantum", support: "245.00", sl: "202.00", resistance: "313.50", tp: "382.00", rr: 2.64, macd: "+", sma: "up", note: "มีแรงทำกำไรตามตลาด" },
+        const stockData = stockDataRaw.filter(stock => stock.support !== '-');
 
-            // Tech Titans
-            { ticker: "AMAT", sector: "Titan", support: "322.00", sl: "314.00", resistance: "436.60", tp: "551.20", rr: 3.42, macd: "+", sma: "up", note: "ยังคงทำ ATH ได้แม้ตลาดปรับตัวลง" },
-            { ticker: "TDC", sector: "Titan", support: "33.00", sl: "29.30", resistance: "37.00", tp: "37.00", rr: 0.68, macd: "+", sma: "up", note: "พลิกกลับมายืนเหนือเส้น 200 ได้แล้ว" },
-            { ticker: "Q", sector: "Titan", support: "119.00", sl: "106.00", resistance: "157.00", tp: "195.00", rr: 2.86, macd: "+", sma: "up", note: "ทำ ATH สวนตลาดได้ งบปังมากๆ" },
-            { ticker: "ONTO", sector: "Titan", support: "225.00", sl: "201.60", resistance: "307.00", tp: "389.00", rr: 3.01, macd: "+", sma: "up", note: "มีแรงขายทำกำไรตามตลาด" },
-
-            // Global DRs
-            { ticker: "9988 (BABA80*)", sector: "DR", support: "123.00", sl: "115.00", resistance: "153.00", tp: "169.00", rr: 1.89, macd: "-", sma: "up", note: "ยังปรับตัวขึ้นเหนือ 50 ไม่ได้ และต้องระวังเส้น 20/50 ตัดลง" },
-            { ticker: "9992 (POP80)", sector: "DR", support: "150.00", sl: "140.00", resistance: "192.00", tp: "219.00", rr: 1.42, macd: "-", sma: "down", note: "ยังคงวิ่งอยู่ในแนวรับ" },
-            { ticker: "9999 (NETEASE80)", sector: "DR", support: "179.00", sl: "170.00", resistance: "204.00", tp: "204.00", rr: 0.98, macd: "-", sma: "down", note: "ปรับขึ้นมาเหนือแนวรับระยะสั้นได้แล้ว" },
-            { ticker: "700 (TENCENT80)", sector: "DR", support: "-", sl: "-", resistance: "-", tp: "-", rr: 0.00, macd: "-", sma: "down", note: "ทำ new low อีกครั้ง ควรเลี่ยงไปก่อน" },
-            { ticker: "1810 (XIAOMI80)", sector: "DR", support: "29.00", sl: "27.30", resistance: "32.00", tp: "32.00", rr: 0.55, macd: "-", sma: "down", note: "ยังติดต้านระยะสั้น" },
-            { ticker: "3750 (CATL23*)", sector: "DR", support: "656.00", sl: "606.00", resistance: "700.00", tp: "744.00", rr: 0.74, macd: "+", sma: "up", note: "กลับมาสร้างฐานอีกครั้ง" },
-            { ticker: "1347 (HUAHONG23)", sector: "DR", support: "110.00", sl: "106.50", resistance: "131.00", tp: "152.00", rr: 1.42, macd: "+", sma: "up", note: "แรงทำกำไร อาจเป็นโอกาสในการรอรับ" },
-            { ticker: "1024 (KUAISH23)", sector: "DR", support: "45.10", sl: "42.60", resistance: "52.80", tp: "52.80", rr: 0.62, macd: "-", sma: "down", note: "ยังติดแนวต้านระยะยาว" },
-            { ticker: "981 (SMIC23*)", sector: "DR", support: "68.00", sl: "65.00", resistance: "78.50", tp: "78.50", rr: 0.75, macd: "-", sma: "up", note: "ติดต้าน" },
-            { ticker: "9961 (TRIPCOM80*)", sector: "DR", support: "386.00", sl: "383.00", resistance: "416.00", tp: "416.00", rr: 0.51, macd: "-", sma: "down", note: "ลงมาต่ำกว่าแนวรับ" },
-            { ticker: "3888 (KINGSOFT23)", sector: "DR", support: "22.80", sl: "22.50", resistance: "26.90", tp: "31.60", rr: 1.94, macd: "-", sma: "down", note: "พลิกกลับมาได้ แต่ยังไม่น่าสนใจ" },
-            { ticker: "9660 (HORIZON23)", sector: "DR", support: "6.25", sl: "6.10", resistance: "7.10", tp: "7.10", rr: 0.53, macd: "-", sma: "down", note: "ควรรอดูไปก่อน" },
-            { ticker: "9880 (UBTECH23)", sector: "DR", support: "105.00", sl: "103.00", resistance: "125.60", tp: "147.00", rr: 1.57, macd: "-", sma: "up", note: "ยังคงรอ Volumn" },
-            { ticker: "20 (SENSE23)", sector: "DR", support: "1.81", sl: "1.80", resistance: "2.00", tp: "2.00", rr: 0.44, macd: "-", sma: "up", note: "ติดต้านลงมา" },
-            { ticker: "8035 (TEL23*)", sector: "DR", support: "42,200", sl: "39,900", resistance: "53,500", tp: "64,800", rr: 3.16, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรแล้ว อาจเป็นการสร้างฐานใหม่" },
-            { ticker: "6857 (ADVANT23)", sector: "DR", support: "23,000", sl: "19,000", resistance: "30,400", tp: "37,800", rr: 2.45, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรแล้ว" },
-            { ticker: "6861 (KEYENCE23)", sector: "DR", support: "63,900", sl: "54,600", resistance: "84,170", tp: "104,400", rr: 4.13, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไร ซึ่งอาจจะลงมาแนงรับด้านล่างได้ เพราะ Volumn บางมาก" },
-            { ticker: "S63 (STEG19)", sector: "DR", support: "9.97", sl: "9.84", resistance: "10.65", tp: "10.65", rr: 0.66, macd: "+", sma: "up", note: "หลุดแนวรับด้านบนมาแล้ว" },
-            { ticker: "ASML (ASML01*)", sector: "DR", support: "1,205.00", sl: "1,163.00", resistance: "1,329.00", tp: "1,453.00", rr: 1.22, macd: "+", sma: "up", note: "น่าจะไปต่อไดั แค่กำลังสร้างฐาน" },
-            { ticker: "NOVO_B (NOVOB80)", sector: "DR", support: "241.00", sl: "225.00", resistance: "302.00", tp: "302.00", rr: 1.03, macd: "-", sma: "down", note: "ยังคงติดต้าน" },
-            { ticker: "AMD (AMD80*)", sector: "DR", support: "355.00", sl: "328.00", resistance: "455.20", tp: "551.00", rr: 6.83, macd: "+", sma: "up", note: "เริ่มมีแรงทำกำไรบ้างแล้ว" },
-            { ticker: "AMZN (AMZN80*)", sector: "DR", support: "262.70", sl: "261.00", resistance: "273.00", tp: "283.30", rr: 0.65, macd: "+", sma: "up", note: "มีทำกำไร แต่อาจเป็นการสร้างฐานใหม่ได้" },
-            { ticker: "AVGO (AVGO80*)", sector: "DR", support: "398.00", sl: "396.00", resistance: "430.00", tp: "462.00", rr: 0.98, macd: "+", sma: "up", note: "มีแรงขายทำกำไร" },
-            { ticker: "GOOG (GOOG80*)", sector: "DR", support: "385.00", sl: "378.00", resistance: "397.00", tp: "409.00", rr: 0.56, macd: "+", sma: "up", note: "เหมือนกำไรสร้างฐานใหม่" },
-            { ticker: "TSLA (TSLA80)", sector: "DR", support: "403.00", sl: "388.70", resistance: "429.00", tp: "429.00", rr: 0.36, macd: "-", sma: "up", note: "ยังติดต้านอยู่" },
-            { ticker: "META (META80)", sector: "DR", support: "604.30", sl: "592.00", resistance: "676.00", tp: "676.00", rr: 0.71, macd: "-", sma: "down", note: "ยังคงไม่หลุดแนวรับ" },
-            { ticker: "MSFT (MSFT80)", sector: "DR", support: "406.00", sl: "390.00", resistance: "430.00", tp: "506.50", rr: 1.93, macd: "-", sma: "down", note: "ยังยืนเหนือ POC ระยะยาวได้" },
-            { ticker: "NFLX (NFLX80)", sector: "DR", support: "86.60", sl: "85.00", resistance: "92.40", tp: "92.40", rr: 0.43, macd: "-", sma: "down", note: "ยังคงปรับตัวลงเรื่อยๆ" },
-            { ticker: "NVDA (NVDA80*)", sector: "DR", support: "192.00", sl: "176.00", resistance: "225.30", tp: "258.60", rr: 2.14, macd: "+", sma: "up", note: "ทำ ATH สวนตลาด" },
-            { ticker: "LLY (LLY80*)", sector: "DR", support: "948.00", sl: "873.00", resistance: "1,036.00", tp: "1,086.40", rr: 0.95, macd: "+", sma: "up", note: "ปรับตัวขึ้นจากแนวรับเรื่อยๆ" }
-        ];
+        function renderVisualizerRange(stock) {
+            const sup = parseFloat(stock.support.replace(/,/g, ''));
+            const sl = parseFloat(stock.sl.replace(/,/g, ''));
+            const tp = parseFloat(stock.tp.replace(/,/g, ''));
+            const res = parseFloat(stock.resistance.replace(/,/g, ''));
+            
+            if (isNaN(sup) || isNaN(sl) || isNaN(tp)) {
+                return ''; 
+            }
+            
+            const minVal = sl;
+            const maxVal = tp;
+            const range = maxVal - minVal;
+            
+            if (range <= 0) return '';
+            
+            const supPercent = ((sup - minVal) / range) * 100;
+            const resPercent = !isNaN(res) ? ((res - minVal) / range) * 100 : null;
+            
+            return `
+                <div class="visual-range" onclick="event.stopPropagation();">
+                    <div class="range-header">
+                        <span style="color: var(--accent-red)">🔴 Stop Loss: ${stock.sl}</span>
+                        <span style="color: var(--accent-green)">🟢 Support: ${stock.support}</span>
+                        <span style="color: var(--accent-blue)">🎯 Target: ${stock.tp}</span>
+                    </div>
+                    <div class="range-bar-wrapper">
+                        <div class="range-bar-fill"></div>
+                        <div class="range-marker marker-support" style="left: ${supPercent}%;" title="Support: ${stock.support}"></div>
+                        ${resPercent !== null ? `<div class="range-marker marker-resistance" style="left: ${resPercent}%;" title="Resistance: ${stock.resistance}"></div>` : ''}
+                    </div>
+                    <div class="range-info-row">
+                        <span>Risk Zone: Stop Loss to Support</span>
+                        <span>R/R Ratio: <strong style="color: ${stock.rr >= 1.5 ? 'var(--accent-green)' : 'var(--text-muted)'}">${stock.rr}</strong></span>
+                    </div>
+                </div>
+            `;
+        }
 
         function renderCards(data) {
             const grid = document.getElementById('dashboardGrid');
@@ -460,6 +1389,7 @@
             data.forEach(stock => {
                 const card = document.createElement('div');
                 card.className = 'stock-card';
+                card.setAttribute('data-sector', stock.sector);
                 card.onclick = function() { 
                     const isExpanded = this.classList.contains('expanded');
                     document.querySelectorAll('.stock-card.expanded').forEach(c => {
@@ -469,57 +1399,56 @@
                     
                     if (window.innerWidth <= 768 && this.classList.contains('expanded')) {
                         setTimeout(() => {
-                           // Get real-time exact positions after expansion animation
-                           const cardRect = this.getBoundingClientRect();
-                           const containerRect = scrollContainer.getBoundingClientRect();
-                           
-                           const cardTop = cardRect.top;
-                           const cardBottom = cardRect.bottom;
-                           const containerTop = containerRect.top;
-                           const containerBottom = containerRect.bottom;
-                           
-                           // If card top is hidden under the menu
-                           if (cardTop < containerTop + 10) {
-                               scrollContainer.scrollBy({ top: cardTop - containerTop - 10, behavior: 'smooth' });
-                           } 
-                           // If card bottom is hidden below the screen
-                           else if (cardBottom > containerBottom - 10) {
-                               let scrollAmount = cardBottom - containerBottom + 20; 
-                               
-                               // Don't scroll so much that we hide the top of the card
-                               if (cardTop - scrollAmount < containerTop + 10) {
-                                   scrollAmount = cardTop - containerTop - 10;
-                               }
-                               
-                               if (scrollAmount > 0) {
-                                   scrollContainer.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-                               }
-                           }
-                           // If it's already comfortably in the middle, DO NOTHING!
-                        }, 320); // Delay matches CSS transition
+                            const cardRect = this.getBoundingClientRect();
+                            const containerRect = scrollContainer.getBoundingClientRect();
+                            const cardTop = cardRect.top;
+                            const cardBottom = cardRect.bottom;
+                            const containerTop = containerRect.top;
+                            const containerBottom = containerRect.bottom;
+                            
+                            if (cardTop < containerTop + 10) {
+                                scrollContainer.scrollBy({ top: cardTop - containerTop - 10, behavior: 'smooth' });
+                            } else if (cardBottom > containerBottom - 10) {
+                                let scrollAmount = cardBottom - containerBottom + 20; 
+                                if (cardTop - scrollAmount < containerTop + 10) {
+                                    scrollAmount = cardTop - containerTop - 10;
+                                }
+                                if (scrollAmount > 0) {
+                                    scrollContainer.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+                                }
+                            }
+                        }, 320);
                     }
                 };
                 
-                const macdClass = stock.macd === '+' ? 'pos' : 'neg';
+                const macdClass = stock.macd === '+' ? 'pos' : (stock.macd === '-' ? 'neg' : '');
+                const macdText = stock.macd === '+' ? '🟢 Positive' : (stock.macd === '-' ? '🔴 Negative' : '-');
+                const smaClass = stock.sma === 'up' ? 'pos' : (stock.sma === 'down' ? 'neg' : '');
+                const smaText = stock.sma === 'up' ? '📈 SMA Up' : (stock.sma === 'down' ? '📉 SMA Down' : '-');
+                const rrBadgeClass = stock.rr >= 1.5 ? 'high' : 'low';
+                
                 card.innerHTML = `
                     <div class="stock-header">
                         <div class="ticker-wrapper">
                             <div class="ticker">${stock.ticker}</div>
                             <div class="sector-tag">${stock.sector}</div>
                         </div>
-                        ${stock.rr > 0 ? `<div class="rr-badge">R/R ${stock.rr}</div>` : '<div></div>'}
+                        ${stock.rr > 0 ? `<div class="rr-badge ${rrBadgeClass}">R/R ${stock.rr}</div>` : '<div></div>'}
                     </div>
-                    <div class="expand-hint">▼ Click to see details</div>
+                    <div class="expand-hint">▼ คลิกเพื่อดูวิเคราะห์ทางเทคนิค & แนวรับ-ต้าน</div>
                     <div class="card-details">
                         <div class="price-info">
-                            <div class="info-box"><span class="info-label">Support</span><span class="info-value">${stock.support}</span></div>
-                            <div class="info-box"><span class="info-label">Target Price</span><span class="info-value" style="color: var(--accent-blue)">${stock.tp}</span></div>
-                            <div class="info-box"><span class="info-label">Resistance</span><span class="info-value">${stock.resistance}</span></div>
-                            <div class="info-box"><span class="info-label">Stop Loss</span><span class="info-value" style="color: var(--accent-red)">${stock.sl}</span></div>
+                            <div class="info-box"><span class="info-label">Support (แนวรับ)</span><span class="info-value">${stock.support}</span></div>
+                            <div class="info-box"><span class="info-label">Target Price (เป้าหมาย)</span><span class="info-value" style="color: var(--accent-blue)">${stock.tp}</span></div>
+                            <div class="info-box"><span class="info-label">Resistance (แนวต้าน)</span><span class="info-value">${stock.resistance}</span></div>
+                            <div class="info-box"><span class="info-label">Stop Loss (ตัดขาดทุน)</span><span class="info-value" style="color: var(--accent-red)">${stock.sl}</span></div>
                         </div>
+                        
+                        ${renderVisualizerRange(stock)}
+                        
                         <div class="technical-indicators">
-                            <span class="indicator">MACD: <b class="${macdClass}">${stock.macd}</b></span>
-                            <span class="indicator">SMA: <b class="${stock.sma === 'up' ? 'pos' : 'neg'}">${stock.sma}</b></span>
+                            <span class="indicator">MACD: <b class="${macdClass}">${macdText}</b></span>
+                            <span class="indicator">SMA: <b class="${smaClass}">${smaText}</b></span>
                         </div>
                         <div class="note">${stock.note}</div>
                     </div>
@@ -552,19 +1481,64 @@
             applyFilters();
         }
 
+        function calculateStats(filteredData) {
+            const totalCount = filteredData.length;
+            const bullishCount = filteredData.filter(s => s.macd === '+' && s.sma === 'up').length;
+            
+            const validRRs = filteredData.filter(s => s.rr > 0).map(s => s.rr);
+            const avgRR = validRRs.length > 0 ? (validRRs.reduce((a, b) => a + b, 0) / validRRs.length).toFixed(2) : '0.00';
+            
+            let topPick = '-';
+            let maxRR = 0;
+            filteredData.forEach(s => {
+                if (s.rr > maxRR) {
+                    maxRR = s.rr;
+                    topPick = s.ticker;
+                }
+            });
+            if (topPick.length > 18) {
+                topPick = topPick.substring(0, 15) + '...';
+            }
+            
+            document.getElementById('statTotal').innerText = totalCount;
+            document.getElementById('statBullish').innerText = bullishCount;
+            document.getElementById('statAvgRR').innerText = avgRR;
+            document.getElementById('statTopPick').innerText = topPick;
+            
+            document.getElementById('statAvgRR').style.color = parseFloat(avgRR) >= 1.5 ? 'var(--accent-green)' : 'var(--text-color)';
+        }
+
+        function updateSectorCounts() {
+            const counts = { all: 0, Nuclear: 0, Quantum: 0, DR: 0, Titan: 0 };
+            stockData.forEach(s => {
+                counts.all++;
+                if (counts[s.sector] !== undefined) {
+                    counts[s.sector]++;
+                }
+            });
+            document.getElementById('countAll').innerText = counts.all;
+            document.getElementById('countNuclear').innerText = counts.Nuclear;
+            document.getElementById('countQuantum').innerText = counts.Quantum;
+            document.getElementById('countDR').innerText = counts.DR;
+            document.getElementById('countTitan').innerText = counts.Titan;
+        }
+
         function applyFilters() {
             const search = document.getElementById('searchInput').value.toUpperCase();
             let filtered = stockData.filter(stock => {
                 if (currentSector !== 'all' && stock.sector !== currentSector) return false;
-                if (search && !stock.ticker.includes(search)) return false;
+                if (search && !stock.ticker.toUpperCase().includes(search)) return false;
                 if (techFilters.rr && stock.rr < 1.5) return false;
                 if (techFilters.macd && stock.macd !== '+') return false;
                 if (techFilters.sma && stock.sma !== 'up') return false;
                 if (techFilters.bull && (stock.macd !== '+' || stock.sma !== 'up' || stock.rr < 1.5)) return false;
                 return true;
             });
+            
             if (currentSort === 'az') filtered.sort((a, b) => a.ticker.localeCompare(b.ticker));
             else if (currentSort === 'rr') filtered.sort((a, b) => b.rr - a.rr);
+            
+            calculateStats(filtered);
             renderCards(filtered);
         }
 
@@ -583,6 +1557,8 @@
             applyFilters();
         }
 
+        // Initial setup
+        updateSectorCounts();
         applyFilters();
     </script>
 </body>
