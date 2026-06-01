@@ -382,6 +382,7 @@
         .stock-card[data-sector="Quantum"]::before { background-color: var(--accent-purple); }
         .stock-card[data-sector="Titan"]::before { background-color: var(--accent-yellow); }
         .stock-card[data-sector="DR"]::before { background-color: var(--accent-blue); }
+        .stock-card[data-sector="Space"]::before { background-color: var(--accent-red); }
 
         .stock-card.expanded {
             transform: translateY(-4px);
@@ -405,6 +406,11 @@
         .stock-card[data-sector="DR"].expanded, .stock-card[data-sector="DR"]:hover {
             border-color: var(--accent-blue);
             box-shadow: 0 8px 30px var(--accent-blue-glow);
+        }
+
+        .stock-card[data-sector="Space"].expanded, .stock-card[data-sector="Space"]:hover {
+            border-color: var(--accent-red);
+            box-shadow: 0 8px 30px var(--accent-red-glow);
         }
 
         .card-details {
@@ -476,6 +482,7 @@
         .stock-card[data-sector="Quantum"] .sector-tag { background-color: rgba(171, 125, 246, 0.1); color: var(--accent-purple); }
         .stock-card[data-sector="Titan"] .sector-tag { background-color: rgba(210, 153, 34, 0.1); color: var(--accent-yellow); }
         .stock-card[data-sector="DR"] .sector-tag { background-color: rgba(88, 166, 255, 0.1); color: var(--accent-blue); }
+        .stock-card[data-sector="Space"] .sector-tag { background-color: rgba(248, 81, 73, 0.1); color: var(--accent-red); }
 
         .rr-badge {
             padding: 4px 10px;
@@ -643,6 +650,10 @@
             <span>Tech Titans</span>
             <span style="font-size: 0.75rem; background: rgba(210, 153, 34, 0.1); color: var(--accent-yellow); padding: 2px 8px; border-radius: 10px;" id="countTitan">0</span>
         </button>
+        <button class="filter-btn" data-sector="Space" onclick="setSector('Space')">
+            <span>Space Economy</span>
+            <span style="font-size: 0.75rem; background: rgba(248, 81, 73, 0.1); color: var(--accent-red); padding: 2px 8px; border-radius: 10px;" id="countSpace">0</span>
+        </button>
         
         <div class="powered-by-sidebar">
             SYSTEM ENGINE
@@ -650,7 +661,7 @@
         </div>
 
         <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 12px; display: flex; flex-direction: column; gap: 4px;">
-            <span>📅 อัปเดตล่าสุด: 25 พฤษภาคม 2026</span>
+            <span>📅 อัปเดตล่าสุด: 30 พฤษภาคม 2026</span>
             <span>⏱️ ข้อมูลสัปดาห์: 25-29M5W4</span>
         </div>
     </div>
@@ -729,419 +740,335 @@
             {
                         "ticker": "9988 (BABA80*)",
                         "sector": "DR",
-                        "support": "123.00",
+                        "support": "118.00",
                         "sl": "117.00",
-                        "resistance": "154.50",
-                        "tp": "185.00",
-                        "rr": 2.57,
-                        "macd": "-",
-                        "sma": "up",
-                        "note": "ยังเกาะกลุ่มอยู่ในแนวรับ"
-            },
-            {
-                        "ticker": "1810 (XIAOMI80)",
-                        "sector": "DR",
-                        "support": "29.00",
-                        "sl": "27.30",
-                        "resistance": "32.00",
-                        "tp": "32.00",
-                        "rr": 0.56,
+                        "resistance": "129.00",
+                        "tp": "129.00",
+                        "rr": 0.46,
                         "macd": "-",
                         "sma": "down",
-                        "note": "ยังติดต้านระยะสั้น"
+                        "note": "ติดต้าน เส้น 20/50 ตัดลง ต้องระมัดระวัง"
             },
             {
                         "ticker": "3750 (CATL23*)",
                         "sector": "DR",
-                        "support": "676.00",
-                        "sl": "606.00",
-                        "resistance": "702.00",
-                        "tp": "728.00",
-                        "rr": 0.45,
+                        "support": "681.00",
+                        "sl": "646.00",
+                        "resistance": "744.50",
+                        "tp": "808.00",
+                        "rr": 1.04,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ยังคงยืนเหนือแนวรับได้"
+                        "note": "ATH ปิดสัปดาห์ได้สวยงาม"
             },
             {
                         "ticker": "1347 (HUAHONG23)",
                         "sector": "DR",
-                        "support": "115.00",
-                        "sl": "107.00",
-                        "resistance": "131.00",
-                        "tp": "147.00",
-                        "rr": 1.01,
+                        "support": "130.00",
+                        "sl": "127.00",
+                        "resistance": "161.30",
+                        "tp": "192.60",
+                        "rr": 1.73,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ยังติดต้านอยู่"
+                        "note": "ATH กระโดดทะลุแนวต้านอย่างสวยงาม"
             },
             {
                         "ticker": "981 (SMIC23*)",
                         "sector": "DR",
-                        "support": "77.00",
-                        "sl": "70.00",
-                        "resistance": "90.50",
-                        "tp": "104.00",
-                        "rr": 1.78,
+                        "support": "80.00",
+                        "sl": "68.00",
+                        "resistance": "91.80",
+                        "tp": "103.60",
+                        "rr": 1.48,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ทะลุขึ้นมาเหนือต้าน น่า Follow buy"
+                        "note": "เปิดสัปดาห์กระโดดแรง แต่มีแรงทำกำไร อาจเป็นโอกาสซื้อที่แนวรับ"
             },
             {
                         "ticker": "9880 (UBTECH23)",
                         "sector": "DR",
-                        "support": "114.00",
-                        "sl": "104.00",
-                        "resistance": "146.00",
-                        "tp": "178.00",
-                        "rr": 2.33,
+                        "support": "96.50",
+                        "sl": "86.50",
+                        "resistance": "114.00",
+                        "tp": "123.60",
+                        "rr": 0.94,
                         "macd": "-",
                         "sma": "up",
-                        "note": "ยืนเหนือแนวรับได้แข็งแกร่ง น่า Follow buy"
+                        "note": "สรุปติดกรอบบน อาจเป็นโอกาสเข้าซื้อที่แนวรับอีกครั้ง"
+            },
+            {
+                        "ticker": "20 (SENSE23)",
+                        "sector": "DR",
+                        "support": "1.55",
+                        "sl": "1.25",
+                        "resistance": "1.98",
+                        "tp": "2.30",
+                        "rr": 1.8,
+                        "macd": "-",
+                        "sma": "up",
+                        "note": "ลงมาแนวรับสำคัญแล้ว อาจพิจารณาเข้าสะสม"
             },
             {
                         "ticker": "8035 (TEL23*)",
                         "sector": "DR",
-                        "support": "46,200.00",
-                        "sl": "39,700.00",
+                        "support": "51,200.00",
+                        "sl": "49,600.00",
                         "resistance": "53,500.00",
-                        "tp": "60,800.00",
-                        "rr": 1.95,
+                        "tp": "55,800.00",
+                        "rr": 0.6,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ลงมาแตะกรอบบนของแนวรับ และเด้งกลับ"
+                        "note": "ยังปิดทำ ATH ได้ฐานก็ใหญ่ขึ้นเรื่อยๆ เช่นกัน"
             },
             {
                         "ticker": "6857 (ADVANT23)",
                         "sector": "DR",
-                        "support": "25,800.00",
-                        "sl": "24,300.00",
+                        "support": "26,000.00",
+                        "sl": "25,500.00",
                         "resistance": "30,400.00",
                         "tp": "35,000.00",
-                        "rr": 1.55,
+                        "rr": 1.52,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ลงมาแตะแนวรับแล้วเด้งกลับ เป็น pin bar ดูน่าจะไปต่อได้"
+                        "note": "ยังคงประครองอยู่เหนือ POC ได้"
             },
             {
                         "ticker": "6861 (KEYENCE23)",
                         "sector": "DR",
-                        "support": "72,500.00",
-                        "sl": "72,000.00",
+                        "support": "79,300.00",
+                        "sl": "78,700.00",
                         "resistance": "84,170.00",
-                        "tp": "95,840.00",
-                        "rr": 2.28,
+                        "tp": "89,000.00",
+                        "rr": 0.92,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ลงมาแตะแนวรับแล้วเด้งกลับ เป็น pin bar ดูน่าจะไปต่อได้"
+                        "note": "ยังปะครองอยู่ในแนวรับได้"
             },
             {
                         "ticker": "ASML (ASML01*)",
                         "sector": "DR",
-                        "support": "1,210.00",
-                        "sl": "1,174.00",
-                        "resistance": "1,409.00",
-                        "tp": "1,608.00",
-                        "rr": 1.87,
+                        "support": "1,320.00",
+                        "sl": "1,280.00",
+                        "resistance": "1,435.00",
+                        "tp": "1,550.00",
+                        "rr": 1.1,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ATH ไปสวยๆ"
+                        "note": "เป็นสัปดาห์ทำกำไร"
             },
             {
                         "ticker": "AMD (AMD80*)",
                         "sector": "DR",
-                        "support": "424.00",
-                        "sl": "392.00",
-                        "resistance": "467.50",
-                        "tp": "511.00",
-                        "rr": 1.05,
+                        "support": "456.00",
+                        "sl": "400.00",
+                        "resistance": "516.10",
+                        "tp": "576.20",
+                        "rr": 1.41,
                         "macd": "+",
                         "sma": "up",
-                        "note": "พลิกกลับมา ATH ได้เฉย แต่จุดนี้ต้องระวัง"
+                        "note": "ATH ได้ต่ออีกครั้ง"
             },
             {
                         "ticker": "AMZN (AMZN80*)",
                         "sector": "DR",
-                        "support": "262.00",
-                        "sl": "258.00",
-                        "resistance": "272.50",
-                        "tp": "283.00",
-                        "rr": 0.67,
+                        "support": "264.00",
+                        "sl": "262.00",
+                        "resistance": "273.00",
+                        "tp": "282.00",
+                        "rr": 0.58,
                         "macd": "+",
                         "sma": "up",
-                        "note": "เหมือนกำลังสร้างฐานใหม่"
+                        "note": "กำลังสร้างฐานใหม่"
             },
             {
                         "ticker": "AVGO (AVGO80*)",
                         "sector": "DR",
-                        "support": "399.00",
-                        "sl": "394.00",
-                        "resistance": "429.40",
-                        "tp": "459.80",
-                        "rr": 0.95,
+                        "support": "418.00",
+                        "sl": "404.60",
+                        "resistance": "446.70",
+                        "tp": "475.40",
+                        "rr": 0.89,
                         "macd": "+",
                         "sma": "up",
-                        "note": "กำลังสร้างฐานใหม่"
+                        "note": "ทำ ATH"
             },
             {
                         "ticker": "GOOG (GOOG80*)",
                         "sector": "DR",
-                        "support": "377.50",
-                        "sl": "376.40",
-                        "resistance": "397.00",
-                        "tp": "416.50",
-                        "rr": 0.9,
+                        "support": "338.60",
+                        "sl": "332.60",
+                        "resistance": "377.00",
+                        "tp": "397.00",
+                        "rr": 1.38,
                         "macd": "+",
                         "sma": "up",
-                        "note": "กำลังสร้างฐานใหม่"
+                        "note": "หลุดแนวรับ"
             },
             {
                         "ticker": "TSLA (TSLA80)",
                         "sector": "DR",
-                        "support": "403.00",
-                        "sl": "389.00",
-                        "resistance": "431.00",
-                        "tp": "431.00",
-                        "rr": 0.38,
-                        "macd": "-",
+                        "support": "430.70",
+                        "sl": "429.70",
+                        "resistance": "445.00",
+                        "tp": "499.00",
+                        "rr": 0.97,
+                        "macd": "+",
                         "sma": "up",
-                        "note": "ยังติดต้านอยู่"
+                        "note": "ยังติดกรอบบนระยะสั้น แต่น่าจะไปต่อได้"
             },
             {
                         "ticker": "META (META80)",
                         "sector": "DR",
-                        "support": "608.00",
-                        "sl": "592.00",
-                        "resistance": "679.00",
-                        "tp": "679.00",
-                        "rr": 0.74,
+                        "support": "614.30",
+                        "sl": "593.00",
+                        "resistance": "669.00",
+                        "tp": "734.00",
+                        "rr": 1.26,
                         "macd": "-",
                         "sma": "down",
-                        "note": "ยังยืนในกรอบได้ แต่เส้น 20/100 กำลังตัดลง ต้องระวัง"
+                        "note": "ปรับตัวจาก POC ได้ แต่เส้น 20/100 กำลังตัดลง ต้องระวัง"
             },
             {
                         "ticker": "MSFT (MSFT80)",
                         "sector": "DR",
-                        "support": "416.00",
-                        "sl": "395.70",
-                        "resistance": "458.00",
-                        "tp": "554.00",
-                        "rr": 2.69,
+                        "support": "430.00",
+                        "sl": "406.00",
+                        "resistance": "450.00",
+                        "tp": "531.80",
+                        "rr": 1.9,
                         "macd": "-",
                         "sma": "down",
-                        "note": "ยังยืนเหนือ POC ระยะยาวได้"
+                        "note": "ขึ้นมาติดกรอบบนระยะยาว แต่น่าจะผ่านไปได้"
             },
             {
                         "ticker": "NVDA (NVDA80*)",
                         "sector": "DR",
-                        "support": "212.00",
-                        "sl": "210.00",
+                        "support": "200.00",
+                        "sl": "197.50",
                         "resistance": "230.00",
-                        "tp": "248.00",
-                        "rr": 1.16,
+                        "tp": "260.00",
+                        "rr": 1.99,
                         "macd": "+",
                         "sma": "up",
-                        "note": "มีแรงทำกำไร"
+                        "note": "ยังคงมีแรงทำกำไร"
             },
             {
                         "ticker": "LLY (LLY80*)",
                         "sector": "DR",
-                        "support": "1,037.00",
-                        "sl": "998.00",
-                        "resistance": "1,080.00",
-                        "tp": "1,123.00",
-                        "rr": 0.58,
+                        "support": "1,078.00",
+                        "sl": "996.60",
+                        "resistance": "1,105.00",
+                        "tp": "1,132.00",
+                        "rr": 0.36,
                         "macd": "+",
                         "sma": "up",
-                        "note": "แนวรับกรอบบนสุดท้าย แต่ผ่านไปได้ คงขึ้นต่อได้สบายๆ"
+                        "note": "ทำ ATH ได้สำเร็จ"
             },
             {
                         "ticker": "SNDK (SNDK80)",
                         "sector": "DR",
-                        "support": "1,294.00",
-                        "sl": "1,277.00",
-                        "resistance": "1,584.00",
-                        "tp": "1,874.00",
-                        "rr": 1.96,
+                        "support": "1,408.00",
+                        "sl": "1,363.50",
+                        "resistance": "1,695.00",
+                        "tp": "1,982.00",
+                        "rr": 1.87,
                         "macd": "+",
                         "sma": "up",
-                        "note": "รอสร้างฐานใหม่"
+                        "note": "ทำ ATH ได้อีกครั้ง"
             },
             {
                         "ticker": "GEV (GEV80)",
                         "sector": "DR",
-                        "support": "1,005.00",
-                        "sl": "972.00",
-                        "resistance": "1,149.00",
-                        "tp": "1,293.00",
-                        "rr": 1.72,
+                        "support": "968.50",
+                        "sl": "964.80",
+                        "resistance": "1,095.80",
+                        "tp": "1,150.30",
+                        "rr": 1.04,
                         "macd": "+",
                         "sma": "up",
-                        "note": "น่าจะกำลังสร้างฐานใหม่"
+                        "note": "ลงมาที่กรอบล่าง แต่อาจหลุด"
             },
             {
                         "ticker": "RKLB (RKLB80)",
                         "sector": "DR",
-                        "support": "94.00",
-                        "sl": "60.40",
-                        "resistance": "135.70",
-                        "tp": "177.40",
-                        "rr": 2.48,
+                        "support": "125.00",
+                        "sl": "123.50",
+                        "resistance": "143.50",
+                        "tp": "162.00",
+                        "rr": 1.21,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ATH อย่างแข็งแกร่ง"
+                        "note": "ทำ ATH ได้อีกครั้ง แต่เหมือนจะเริ่มมีแรงทำกำไรแล้ว"
             },
             {
                         "ticker": "PLTR (PLTR23)",
                         "sector": "DR",
-                        "support": "133.70",
-                        "sl": "126.00",
-                        "resistance": "156.00",
-                        "tp": "205.00",
-                        "rr": 2.15,
+                        "support": "150.50",
+                        "sl": "149.50",
+                        "resistance": "183.30",
+                        "tp": "205.40",
+                        "rr": 1.59,
                         "macd": "-",
                         "sma": "down",
-                        "note": "เกิดฐานแล้ว น่าเข้าสะสม"
+                        "note": "ปรับตัวขึ้นจาก POC ได้แข็งแกร่ง"
             },
             {
                         "ticker": "CCJ (CCJ23)",
                         "sector": "DR",
-                        "support": "102.40",
-                        "sl": "100.40",
-                        "resistance": "116.00",
-                        "tp": "116.00",
+                        "support": "108.60",
+                        "sl": "101.00",
+                        "resistance": "117.00",
+                        "tp": "122.00",
                         "rr": 0.57,
                         "macd": "+",
                         "sma": "up",
-                        "note": "แนวรับสุดท้าย ถ้าหลุดต้องถอย"
+                        "note": "รอดแนวรับสุดท้ายมาได้"
             },
             {
                         "ticker": "WTI (OIL03)",
                         "sector": "DR",
-                        "support": "91.70",
-                        "sl": "91.20",
-                        "resistance": "103.60",
-                        "tp": "115.50",
-                        "rr": 1.08,
+                        "support": "86.00",
+                        "sl": "83.40",
+                        "resistance": "91.20",
+                        "tp": "91.20",
+                        "rr": 0.24,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ยังคงยืนเหนือแนวรับได้ และทำ Sideway"
+                        "note": "ขึ้นติดต้าน เป็นข่าวดี ให้หุ้นไปต่อได้"
             },
             {
                         "ticker": "GOLD (GOLDUS80)",
                         "sector": "DR",
                         "support": "4,470.00",
                         "sl": "4,460.00",
-                        "resistance": "4,680.00",
-                        "tp": "4,680.00",
-                        "rr": 0.38,
+                        "resistance": "4,830.00",
+                        "tp": "5,280.00",
+                        "rr": 1.49,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ยังไม่หลุดแนวรับสุดท้าย แต่ต้องระวัง"
-            },
-            {
-                        "ticker": "WDAY",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
-            },
-            {
-                        "ticker": "OTEX",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
-            },
-            {
-                        "ticker": "EPAM",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "up",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
-            },
-            {
-                        "ticker": "IT",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
-            },
-            {
-                        "ticker": "ADBE",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
-            },
-            {
-                        "ticker": "DOCU",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
+                        "note": "ปิดสัปดาห์มายืนเหนือ 4470 ได้"
             },
             {
                         "ticker": "AMAT",
                         "sector": "Titan",
-                        "support": "322.00",
-                        "sl": "314.00",
-                        "resistance": "439.00",
-                        "tp": "556.00",
-                        "rr": 3.41,
+                        "support": "397.20",
+                        "sl": "385.00",
+                        "resistance": "450.00",
+                        "tp": "502.80",
+                        "rr": 1.55,
                         "macd": "+",
                         "sma": "up",
                         "note": "เหมือนจะตึงตัว รอสร้างฐาน"
             },
             {
-                        "ticker": "KD",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
-            },
-            {
                         "ticker": "TDC",
                         "sector": "Titan",
-                        "support": "33.00",
-                        "sl": "29.30",
-                        "resistance": "41.70",
-                        "tp": "41.70",
-                        "rr": 1.48,
+                        "support": "33.50",
+                        "sl": "33.30",
+                        "resistance": "41.80",
+                        "tp": "43.30",
+                        "rr": 1.64,
                         "macd": "+",
                         "sma": "up",
                         "note": "ยังคงยืนอยู่แถวเส้น 200"
@@ -1149,71 +1076,23 @@
             {
                         "ticker": "Q",
                         "sector": "Titan",
-                        "support": "144.00",
-                        "sl": "139.00",
-                        "resistance": "157.00",
-                        "tp": "170.00",
-                        "rr": 0.93,
+                        "support": "155.30",
+                        "sl": "154.00",
+                        "resistance": "165.00",
+                        "tp": "174.70",
+                        "rr": 0.72,
                         "macd": "+",
                         "sma": "up",
                         "note": "ติดต้าน"
             },
             {
-                        "ticker": "ADSK",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "รอดูไปก่อนดีกว่า"
-            },
-            {
-                        "ticker": "BMI",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เทรนขาลงไม่ผ่านเกณฑ์"
-            },
-            {
-                        "ticker": "CTSH",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "หลุดแนวรับ เส้น 20/200 ตัดลง รอดูไปก่อน"
-            },
-            {
-                        "ticker": "FICO",
-                        "sector": "Titan",
-                        "support": "-",
-                        "sl": "-",
-                        "resistance": "-",
-                        "tp": "-",
-                        "rr": 0.0,
-                        "macd": "-",
-                        "sma": "down",
-                        "note": "เหมือนจะยืนหลอก เพราะไม่มี Volumn ควรรอดูไปก่อน"
-            },
-            {
                         "ticker": "ONTO",
                         "sector": "Titan",
-                        "support": "228.00",
-                        "sl": "205.80",
-                        "resistance": "308.00",
-                        "tp": "389.00",
-                        "rr": 2.91,
+                        "support": "253.00",
+                        "sl": "252.00",
+                        "resistance": "297.00",
+                        "tp": "341.00",
+                        "rr": 1.57,
                         "macd": "+",
                         "sma": "up",
                         "note": "หลงมาเกือบแนวรับ แต่น่าจับตา อาจลงมาถึง"
@@ -1221,47 +1100,47 @@
             {
                         "ticker": "CEG",
                         "sector": "Nuclear",
-                        "support": "267.00",
-                        "sl": "260.00",
-                        "resistance": "295.00",
-                        "tp": "295.00",
-                        "rr": 0.41,
+                        "support": "284.00",
+                        "sl": "280.00",
+                        "resistance": "313.50",
+                        "tp": "396.50",
+                        "rr": 1.68,
                         "macd": "-",
                         "sma": "down",
-                        "note": "ขึ้นมาหลังจากหลุด new low แต่ติดต้าน"
+                        "note": "ติดต้านระยะยาว"
             },
             {
                         "ticker": "SMR",
                         "sector": "Nuclear",
-                        "support": "9.00",
+                        "support": "11.50",
                         "sl": "8.80",
-                        "resistance": "13.00",
-                        "tp": "13.00",
-                        "rr": 0.59,
+                        "resistance": "20.50",
+                        "tp": "53.40",
+                        "rr": 6.18,
                         "macd": "-",
                         "sma": "down",
-                        "note": "ขึ้ึ้นมาติดต้าน"
+                        "note": "ยังยืนในแนว POC ทั้งระยะสั้นและยาว"
             },
             {
                         "ticker": "APD",
                         "sector": "Nuclear",
-                        "support": "253.60",
-                        "sl": "251.00",
-                        "resistance": "288.00",
-                        "tp": "288.00",
-                        "rr": 1.19,
+                        "support": "240.00",
+                        "sl": "238.50",
+                        "resistance": "285.00",
+                        "tp": "285.00",
+                        "rr": 1.57,
                         "macd": "+",
                         "sma": "up",
-                        "note": "หลุดขอบบนแนวรับ"
+                        "note": "หลุด POC ระยะยาวแล้ว"
             },
             {
                         "ticker": "BE",
                         "sector": "Nuclear",
-                        "support": "275.00",
-                        "sl": "259.00",
-                        "resistance": "302.50",
-                        "tp": "330.00",
-                        "rr": 0.7,
+                        "support": "269.70",
+                        "sl": "259.70",
+                        "resistance": "316.00",
+                        "tp": "362.30",
+                        "rr": 1.15,
                         "macd": "+",
                         "sma": "up",
                         "note": "รอสร้างฐานใหม่"
@@ -1269,77 +1148,112 @@
             {
                         "ticker": "IONQ",
                         "sector": "Quantum",
-                        "support": "48.50",
-                        "sl": "45.00",
+                        "support": "49.20",
+                        "sl": "38.60",
                         "resistance": "74.00",
-                        "tp": "100.00",
-                        "rr": 2.84,
-                        "macd": "-",
+                        "tp": "98.80",
+                        "rr": 2.66,
+                        "macd": "+",
                         "sma": "down",
-                        "note": "ปรับตัวขึ้นมาแรง รับข่าวทาง US ทุ่มทุน"
+                        "note": "ยังคงปรับตัวขึ้นได้ต่อ"
             },
             {
                         "ticker": "RGTI",
                         "sector": "Quantum",
-                        "support": "25.75",
-                        "sl": "23.40",
+                        "support": "23.70",
+                        "sl": "23.00",
                         "resistance": "44.20",
                         "tp": "58.00",
-                        "rr": 3.59,
+                        "rr": 3.85,
                         "macd": "-",
                         "sma": "down",
-                        "note": "ปรับตัวขึ้นมาแรง รับข่าวทาง US ทุ่มทุน และน่า Follow Buy"
+                        "note": "ยังยืนในแนวรับ POC ได้"
             },
             {
                         "ticker": "IBM",
                         "sector": "Quantum",
-                        "support": "252.60",
-                        "sl": "225.40",
-                        "resistance": "264.00",
-                        "tp": "308.00",
-                        "rr": 1.29,
+                        "support": "280.00",
+                        "sl": "277.00",
+                        "resistance": "307.70",
+                        "tp": "307.70",
+                        "rr": 0.58,
                         "macd": "-",
                         "sma": "down",
-                        "note": "ปรับตัวขึ้นมาแรง รับข่าวทาง US ทุ่มทุน แต่ติดต้าน"
+                        "note": "break แนวต้านได้แรงมาก ถ้าทำ ATH ได้ จะน่าสนใจมาก"
             },
             {
                         "ticker": "FORM",
                         "sector": "Quantum",
-                        "support": "125.00",
-                        "sl": "119.00",
+                        "support": "122.00",
+                        "sl": "121.00",
                         "resistance": "156.00",
-                        "tp": "188.00",
-                        "rr": 1.99,
+                        "tp": "190.00",
+                        "rr": 2.15,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ลงมาแตะขอบล่าง รอสร้างฐานต่อไป"
+                        "note": "ยังยืนที่กรอบล่างได้"
             },
             {
                         "ticker": "COHR",
                         "sector": "Quantum",
-                        "support": "344.40",
-                        "sl": "327.00",
-                        "resistance": "382.50",
-                        "tp": "420.60",
-                        "rr": 0.91,
+                        "support": "345.00",
+                        "sl": "327.50",
+                        "resistance": "383.00",
+                        "tp": "421.00",
+                        "rr": 0.9,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ลงและขึ้นตามตลาด"
+                        "note": "ยังยืนอยู่ได้"
             },
             {
                         "ticker": "MKSI",
                         "sector": "Quantum",
-                        "support": "313.30",
-                        "sl": "301.50",
-                        "resistance": "320.60",
-                        "tp": "327.90",
-                        "rr": 0.27,
+                        "support": "321.00",
+                        "sl": "313.00",
+                        "resistance": "330.50",
+                        "tp": "340.00",
+                        "rr": 0.36,
                         "macd": "+",
                         "sma": "up",
-                        "note": "ลงและขึ้นตามตลาดทำ ATH เป็น Pin bar น่า Follow Buy"
+                        "note": "ทำ ATH ได้ ตามตลาด แต่มีแรงทำกำไร"
+            },
+            {
+                        "ticker": "RKLB",
+                        "sector": "Space",
+                        "support": "125.00",
+                        "sl": "123.50",
+                        "resistance": "143.50",
+                        "tp": "162.00",
+                        "rr": 1.21,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ทำ ATH ได้อีกครั้ง แต่เหมือนจะเริ่มมีแรงทำกำไรแล้ว"
+            },
+            {
+                        "ticker": "ASTS",
+                        "sector": "Space",
+                        "support": "112.50",
+                        "sl": "108.00",
+                        "resistance": "130.00",
+                        "tp": "130.00",
+                        "rr": 0.49,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ชนต้าน เจอแรงทำกำไร"
+            },
+            {
+                        "ticker": "RDW",
+                        "sector": "Space",
+                        "support": "21.80",
+                        "sl": "21.60",
+                        "resistance": "24.60",
+                        "tp": "26.60",
+                        "rr": 1.11,
+                        "macd": "+",
+                        "sma": "up",
+                        "note": "ATH ได้แล้ว"
             }
 ];
-
         const stockData = stockDataRaw.filter(stock => stock.support !== '-');
 
         function renderVisualizerRange(stock) {
@@ -1509,7 +1423,7 @@
         }
 
         function updateSectorCounts() {
-            const counts = { all: 0, Nuclear: 0, Quantum: 0, DR: 0, Titan: 0 };
+            const counts = { all: 0, Nuclear: 0, Quantum: 0, DR: 0, Titan: 0, Space: 0 };
             stockData.forEach(s => {
                 counts.all++;
                 if (counts[s.sector] !== undefined) {
@@ -1521,6 +1435,7 @@
             document.getElementById('countQuantum').innerText = counts.Quantum;
             document.getElementById('countDR').innerText = counts.DR;
             document.getElementById('countTitan').innerText = counts.Titan;
+            document.getElementById('countSpace').innerText = counts.Space;
         }
 
         function applyFilters() {
